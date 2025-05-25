@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách mã dự phòng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #6b48ff);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 30px;
+            margin: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        h1 {
+            font-size: 2.8em;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-top: 40px;
+        }
+
+        .code-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s forwards;
+        }
+
+        .code-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .code {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.3em;
+            color: #e0e0e0;
+            letter-spacing: 1px;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.6em;
+            color: #ccc;
+            transition: transform 0.2s ease, color 0.3s ease;
+        }
+
+        .star-btn.copied {
+            color: #ffd700;
+            animation: sparkle 0.5s ease;
+        }
+
+        .star-btn:hover {
+            transform: scale(1.3);
+            color: #fff;
+        }
+
+        .star-btn:active {
+            transform: scale(0.9);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1em;
+            color: #ddd;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .footer span {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            font-size: 1em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+
+        .copy-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+            to { text-shadow: 0 0 20px rgba(255, 255, 255, 1); }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.6em;
+            }
+            .code {
+                font-size: 1.1em;
+            }
+            .star-btn {
+                font-size: 1.4em;
+            }
+            .footer {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <h1>Danh sách mã dự phòng</h1>
+        <div id="backupCodeList"></div>
+        <h2>Mã dự phòng acc chính</h2>
+        <div id="mainAccCodeList"></div>
+        <div class="footer">Website thuộc về <span>khoitongdz</span></div>
+    </div>
+    <div id="copyToast" class="copy-toast">Đã sao chép mã!</div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Khởi tạo particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 100, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.6, random: true },
+                size: { value: 3, random: true },
+                line_linked: { enable: false },
+                move: { enable: true, speed: 3, direction: 'none', random: true }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
+                modes: { repulse: { distance: 120, duration: 0.4 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
+        // Danh sách mã
+        const codes = [
+            'down',
+            'down',
+            'down',
+            'down',
+            'down',
+            'down',
+            'down',
+            'down',
+            'down',
+            'down'
+        ];
+
+        // Hàm hiển thị danh sách mã
+        function renderCodeList(containerId, codeList) {
+            const codeListContainer = document.getElementById(containerId);
+            codeListContainer.innerHTML = '';
+            codeList.forEach((code, index) => {
+                const div = document.createElement('div');
+                div.className = 'code-item';
+                div.style.animationDelay = `${index * 0.1}s`;
+                div.innerHTML = `
+                    <span class="code">${code}</span>
+                    <button class="star-btn" data-code="${code}" title="Sao chép mã">
+                        <i class="fas fa-star"></i>
+                    </button>
+                `;
+                codeListContainer.appendChild(div);
+            });
+        }
+
+        // Hàm sao chép mã và hiển thị thông báo
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.textContent = `Đã sao chép: ${code}`;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 2000);
+                const button = document.querySelector(`.star-btn[data-code="${code}"]`);
+                button.classList.add('copied');
+                setTimeout(() => button.classList.remove('copied'), 1000);
+            }).catch(() => {
+                alert('Lỗi khi sao chép mã!');
+            });
+        }
+
+        // Thêm sự kiện click cho nút sao
+        document.addEventListener('click', (event) => {
+            if (event.target.closest('.star-btn')) {
+                const code = event.target.closest('.star-btn').dataset.code;
+                copyCode(code);
+            }
+        });
+
+        // Khởi tạo cả hai danh sách
+        renderCodeList('backupCodeList', codes);
+        renderCodeList('mainAccCodeList', codes);
+    </script>
+</body>
+</html>
