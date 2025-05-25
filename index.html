@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Danh sách mã dự phòng</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -15,7 +15,8 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1e3c72, #2a5298, #6b48ff);
+            background: linear-gradient(45deg, #1e3c72, #2a5298, #6b48ff, #ff6f61);
+            background-size: 400%;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -23,6 +24,7 @@
             align-items: center;
             overflow-x: hidden;
             position: relative;
+            animation: gradient 15s ease infinite;
         }
 
         #particles-js {
@@ -41,30 +43,36 @@
             margin: 20px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             position: relative;
             z-index: 1;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 15px 50px rgba(255, 255, 255, 0.2);
         }
 
         h1, h2 {
             text-align: center;
             margin-bottom: 30px;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             color: #fff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-            animation: glow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 30px rgba(255, 255, 255, 0.7);
+            animation: neon 1.5s ease-in-out infinite alternate;
         }
 
         h1 {
-            font-size: 2.8em;
+            font-size: 3em;
+            font-weight: 700;
         }
 
         h2 {
-            font-size: 2em;
-            margin-top: 40px;
+            font-size: 2.2em;
+            margin-top: 50px;
         }
 
         .code-item {
@@ -73,7 +81,7 @@
             align-items: center;
             padding: 15px 20px;
             margin: 10px 0;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             opacity: 0;
@@ -83,7 +91,7 @@
 
         .code-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
 
         .code {
@@ -97,14 +105,17 @@
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 1.6em;
+            font-size: 1.8em;
             color: #ccc;
             transition: transform 0.2s ease, color 0.3s ease;
         }
 
         .star-btn.copied {
-            color: #ffd700;
-            animation: sparkle 0.5s ease;
+            color: transparent;
+            background: linear-gradient(45deg, #ffd700, #ff6f61);
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: sparkle 0.6s ease, rotate 0.6s ease;
         }
 
         .star-btn:hover {
@@ -119,36 +130,47 @@
         .footer {
             text-align: center;
             margin-top: 40px;
-            font-size: 1em;
+            font-size: 1.1em;
             color: #ddd;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
             letter-spacing: 1px;
+            transition: transform 0.3s ease;
         }
 
         .footer span {
             color: #ffd700;
             font-weight: 600;
+            transition: text-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer span:hover {
+            text-shadow: 0 0 20px #ffd700, 0 0 30px #ffd700;
+            transform: scale(1.1);
         }
 
         .copy-toast {
             position: fixed;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.85);
+            background: linear-gradient(45deg, #ffd700, #ff6f61, #6b48ff);
+            background-size: 200%;
             color: #fff;
-            padding: 12px 25px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            border-radius: 12px;
             opacity: 0;
             transition: opacity 0.3s ease, transform 0.3s ease;
-            font-size: 1em;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-size: 1.2em;
+            font-weight: 600;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            animation: toastGlow 1.5s ease-in-out infinite alternate;
         }
 
         .copy-toast.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(-10px);
+            transform: translateX(-50%) translateY(-15px);
+            animation: toastGlow 1.5s ease-in-out infinite alternate, shake 0.3s ease;
         }
 
         @keyframes slideIn {
@@ -160,13 +182,38 @@
 
         @keyframes sparkle {
             0% { transform: scale(1); }
-            50% { transform: scale(1.4); }
+            50% { transform: scale(1.5); }
             100% { transform: scale(1); }
         }
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
-            to { text-shadow: 0 0 20px rgba(255, 255, 255, 1); }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes neon {
+            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5); }
+            to { text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 0.8); }
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes toastGlow {
+            from { box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5); }
+            to { box-shadow: 0 6px 30px rgba(255, 255, 255, 0.5); }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(-50%) translateY(-15px); }
+            25% { transform: translateX(-52%) translateY(-15px); }
+            50% { transform: translateX(-48%) translateY(-15px); }
+            75% { transform: translateX(-52%) translateY(-15px); }
+            100% { transform: translateX(-50%) translateY(-15px); }
         }
 
         @media (max-width: 600px) {
@@ -175,19 +222,23 @@
                 padding: 20px;
             }
             h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
             h2 {
-                font-size: 1.6em;
+                font-size: 1.8em;
             }
             .code {
                 font-size: 1.1em;
             }
             .star-btn {
-                font-size: 1.4em;
+                font-size: 1.5em;
             }
             .footer {
                 font-size: 0.9em;
+            }
+            .copy-toast {
+                padding: 12px 20px;
+                font-size: 1em;
             }
         }
     </style>
@@ -195,47 +246,61 @@
 <body>
     <div id="particles-js"></div>
     <div class="container">
-        <h1>Danh sách mã dự phòng</h1>
+        <h1> mã dự phòng reisurk</h1>
         <div id="backupCodeList"></div>
-        <h2>Mã dự phòng acc chính</h2>
+        <h2>Mã dự phòng reisurrk</h2>
         <div id="mainAccCodeList"></div>
-        <div class="footer">Website thuộc về <span>khoitongdz</span></div>
+        <div class="footer">Website by<span>devX</span></div>
     </div>
     <div id="copyToast" class="copy-toast">Đã sao chép mã!</div>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script>
         // Khởi tạo particles.js
         particlesJS('particles-js', {
             particles: {
-                number: { value: 100, density: { enable: true, value_area: 800 } },
-                color: { value: '#ffffff' },
-                shape: { type: 'circle' },
-                opacity: { value: 0.6, random: true },
-                size: { value: 3, random: true },
+                number: { value: 120, density: { enable: true, value_area: 800 } },
+                color: { value: ['#ffffff', '#ffd700', '#ff6f61'] },
+                shape: { type: ['circle', 'star'] },
+                opacity: { value: 0.7, random: true },
+                size: { value: 4, random: true },
                 line_linked: { enable: false },
-                move: { enable: true, speed: 3, direction: 'none', random: true }
+                move: { enable: true, speed: 4, direction: 'none', random: true }
             },
             interactivity: {
                 detect_on: 'canvas',
                 events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
-                modes: { repulse: { distance: 120, duration: 0.4 }, push: { particles_nb: 4 } }
+                modes: { repulse: { distance: 150, duration: 0.4 }, push: { particles_nb: 5 } }
             },
             retina_detect: true
         });
 
         // Danh sách mã
-        const codes = [
-            'down',
-            'down',
-            'down',
-            'down',
-            'down',
-            'down',
-            'down',
-            'down',
-            'down',
-            'down'
+        const backupCodes = [
+            'df3ngqdyf',
+            '9l63isj1s',
+            '9vwv1k87o',
+            'esq7mut9v',
+            'jzsbpwlrd',
+            'tyfa2zfq6',
+            '84q50lvq7',
+            '49g9fub9d',
+            '5kdvjw34b',
+            '83elaggkc'
+        ];
+        
+        const mainAccCodes = [
+            'false to load!',
+            'false to load!',
+            'false to load!',
+            'false to load!',
+            'false to load!',
+            'false to load!',
+            'false to load!',
+            'false to load!',
+            'false to load!',
+            'false to load!'
         ];
 
         // Hàm hiển thị danh sách mã
@@ -256,16 +321,47 @@
             });
         }
 
+        // Hàm chạy hiệu ứng confetti
+        function launchConfetti() {
+            confetti({
+                particleCount: 150,
+                spread: 90,
+                origin: { y: 0.5 },
+                colors: ['#ffd700', '#ff6f61', '#6b48ff', '#ffffff'],
+                shapes: ['star', 'circle'],
+                scalar: 1.2,
+                gravity: 0.5,
+                ticks: 200
+            });
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { x: 0.2, y: 0.5 },
+                colors: ['#ffd700', '#ff6f61'],
+                shapes: ['star'],
+                scalar: 0.8
+            });
+            confetti({
+                particleCount: 50,
+                spread: 60,
+                origin: { x: 0.8, y: 0.5 },
+                colors: ['#6b48ff', '#ffffff'],
+                shapes: ['circle'],
+                scalar: 0.8
+            });
+        }
+
         // Hàm sao chép mã và hiển thị thông báo
         function copyCode(code) {
             navigator.clipboard.writeText(code).then(() => {
                 const toast = document.getElementById('copyToast');
                 toast.textContent = `Đã sao chép: ${code}`;
                 toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 2000);
+                setTimeout(() => toast.classList.remove('show'), 2500);
                 const button = document.querySelector(`.star-btn[data-code="${code}"]`);
                 button.classList.add('copied');
                 setTimeout(() => button.classList.remove('copied'), 1000);
+                launchConfetti();
             }).catch(() => {
                 alert('Lỗi khi sao chép mã!');
             });
@@ -280,8 +376,8 @@
         });
 
         // Khởi tạo cả hai danh sách
-        renderCodeList('backupCodeList', codes);
-        renderCodeList('mainAccCodeList', codes);
+        renderCodeList('backupCodeList', backupCodes);
+        renderCodeList('mainAccCodeList', mainAccCodes);
     </script>
 </body>
 </html>
