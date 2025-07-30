@@ -241,21 +241,9 @@
       gap: 20px;
     }
 
-    .playlist-selector, .url-inputs, .playback-buttons, .volume-control, .progress-container {
+    .playlist-selector, .playback-buttons, .volume-control, .progress-container {
       width: 100%;
       max-width: 400px;
-    }
-
-    .url-inputs {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .playback-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
     }
 
     .video-container {
@@ -387,11 +375,8 @@
       .player-controls {
         max-width: 100%;
       }
-      .playlist-selector, .url-inputs, .playback-buttons, .volume-control, .progress-container {
+      .playlist-selector, .playback-buttons, .volume-control, .progress-container {
         max-width: 100%;
-      }
-      .url-inputs {
-        gap: 10px;
       }
       .playback-buttons {
         gap: 5px;
@@ -423,23 +408,12 @@
     <h3>Playlist</h3>
     <div class="player-controls">
       <div class="playlist-selector">
-        <label class="block text-sm font-medium text-green-400 mb-2">Chọn Playlist để phát trước</label>
+        <label class="block text-sm font-medium text-green-400 mb-2">Chọn Playlist để phát</label>
         <select id="playlistSelector" class="bg-gray-800 text-white p-3 rounded-lg w-full">
           <option value="1">Playlist 1</option>
           <option value="2">Playlist 2</option>
+          <option value="3">Playlist 3</option>
         </select>
-      </div>
-      <div class="url-inputs">
-        <div>
-          <label for="customPlaylist1" class="block text-sm font-medium text-green-400 mb-2">URL Playlist 1</label>
-          <input type="text" id="customPlaylist1" class="bg-gray-800 text-white p-3 rounded-lg w-full" placeholder="Nhập URL Playlist 1">
-          <button onclick="updatePlaylist(1)" class="mt-2 bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold w-full">Cập nhật Playlist 1</button>
-        </div>
-        <div>
-          <label for="customPlaylist2" class="block text-sm font-medium text-green-400 mb-2">URL Playlist 2</label>
-          <input type="text" id="customPlaylist2" class="bg-gray-800 text-white p-3 rounded-lg w-full" placeholder="Nhập URL Playlist 2">
-          <button onclick="updatePlaylist(2)" class="mt-2 bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold w-full">Cập nhật Playlist 2</button>
-        </div>
       </div>
       <div class="playback-buttons">
         <button onclick="playAudio()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Phát</button>
@@ -467,6 +441,14 @@
           <span id="duration2">0:00</span>
         </div>
       </div>
+      <div id="progress3Container" class="progress-container">
+        <label for="progress3" class="block text-sm font-medium text-green-400 mb-2">Tiến trình (Playlist 3)</label>
+        <input type="range" id="progress3" min="0" max="100" value="0" oninput="seekTo(3, this.value)" class="w-full">
+        <div class="flex justify-between text-xs text-green-400 mt-2">
+          <span id="currentTime3">0:00</span>
+          <span id="duration3">0:00</span>
+        </div>
+      </div>
     </div>
     <div class="video-container">
       <iframe
@@ -480,6 +462,14 @@
       <iframe
         id="youtubePlayer2"
         data-src="https://www.youtube.com/embed/videoseries?list=RDgze7WfLyxfE&enablejsapi=1"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+      <iframe
+        id="youtubePlayer3"
+        data-src="https://www.youtube.com/embed/videoseries?list=RDOuNo8Tkb3lI&enablejsapi=1"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
@@ -596,20 +586,26 @@
     let audioContext = null;
     let gainNode1 = null;
     let gainNode2 = null;
+    let gainNode3 = null;
 
     function setupAudioContext() {
       if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        gainNode1 = audioContext.createGain();
-        gainNode2 = audioContext.createGain();
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          gainNode1 = audioContext.createGain();
+          gainNode2 = audioContext.createGain();
+          gainNode3 = audioContext.createGain();
+        } catch (e) {
+          console.error('Lỗi khi khởi tạo AudioContext:', e);
+        }
       }
     }
 
     // YouTube Player API
     let youtubeApiLoaded = false;
-    let player1, player2;
-    let duration1 = 0, duration2 = 0;
-    let isPlayer1Active = true;
+    let player1, player2, player3;
+    let duration1 = 0, duration2 = 0, duration3 = 0;
+    let activePlayer = 1;
     let updateProgressHandle = null;
 
     function loadYouTubePlayer() {
@@ -624,45 +620,65 @@
 
     window.onYouTubeIframeAPIReady = function () {
       setupAudioContext();
-      player1 = new YT.Player('youtubePlayer1', {
-        events: {
-          'onReady': (event) => onPlayerReady(event, 1),
-          'onStateChange': (event) => onPlayerStateChange(event, 1),
-        },
-      });
-      player2 = new YT.Player('youtubePlayer2', {
-        events: {
-          'onReady': (event) => onPlayerReady(event, 2),
-          'onStateChange': (event) => onPlayerStateChange(event, 2),
-        },
-      });
+      try {
+        player1 = new YT.Player('youtubePlayer1', {
+          events: {
+            'onReady': (event) => onPlayerReady(event, 1),
+            'onStateChange': (event) => onPlayerStateChange(event, 1),
+            'onError': (event) => console.error(`Lỗi Player 1: ${event.data}`),
+          },
+        });
+        player2 = new YT.Player('youtubePlayer2', {
+          events: {
+            'onReady': (event) => onPlayerReady(event, 2),
+            'onStateChange': (event) => onPlayerStateChange(event, 2),
+            'onError': (event) => console.error(`Lỗi Player 2: ${event.data}`),
+          },
+        });
+        player3 = new YT.Player('youtubePlayer3', {
+          events: {
+            'onReady': (event) => onPlayerReady(event, 3),
+            'onStateChange': (event) => onPlayerStateChange(event, 3),
+            'onError': (event) => console.error(`Lỗi Player 3: ${event.data}`),
+          },
+        });
+      } catch (e) {
+        console.error('Lỗi khi khởi tạo YouTube Player:', e);
+      }
     };
 
     function onPlayerReady(event, playerId) {
       if (!event.target) return;
-      const player = playerId === 1 ? player1 : player2;
+      const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
       const iframe = document.getElementById(`youtubePlayer${playerId}`);
-      const mediaElement = iframe.contentWindow.document.querySelector('video');
-      if (mediaElement && audioContext) {
-        const source = audioContext.createMediaElementSource(mediaElement);
-        const gainNode = playerId === 1 ? gainNode1 : gainNode2;
-        source.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        gainNode.gain.setValueAtTime(1, audioContext.currentTime);
-      }
-      player.setVolume(100);
-      const duration = player.getDuration();
-      if (playerId === 1) {
-        duration1 = duration;
-        document.getElementById('duration1').textContent = formatTime(duration);
-      } else {
-        duration2 = duration;
-        document.getElementById('duration2').textContent = formatTime(duration);
-      }
-      console.log(`Trình phát ${playerId} đã sẵn sàng.`);
-      updateProgressVisibility();
-      if (!updateProgressHandle) {
-        startProgressUpdates();
+      try {
+        const mediaElement = iframe.contentWindow.document.querySelector('video');
+        if (mediaElement && audioContext) {
+          const source = audioContext.createMediaElementSource(mediaElement);
+          const gainNode = playerId === 1 ? gainNode1 : playerId === 2 ? gainNode2 : gainNode3;
+          source.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+        }
+        player.setVolume(100);
+        const duration = player.getDuration() || 0;
+        if (playerId === 1) {
+          duration1 = duration;
+          document.getElementById('duration1').textContent = formatTime(duration);
+        } else if (playerId === 2) {
+          duration2 = duration;
+          document.getElementById('duration2').textContent = formatTime(duration);
+        } else {
+          duration3 = duration;
+          document.getElementById('duration3').textContent = formatTime(duration);
+        }
+        console.log(`Trình phát ${playerId} đã sẵn sàng.`);
+        updateProgressVisibility();
+        if (!updateProgressHandle) {
+          startProgressUpdates();
+        }
+      } catch (e) {
+        console.error(`Lỗi khi xử lý Player ${playerId} sẵn sàng:`, e);
       }
     }
 
@@ -675,107 +691,166 @@
         3: 'Đang đệm',
         5: 'Video được cued',
       };
-      const player = playerId === 1 ? player1 : player2;
+      const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
       console.log(`Trạng thái trình phát ${playerId}: ${states[event.data]}`);
-      console.log(`Thời gian hiện tại (Player ${playerId}): ${player.getCurrentTime().toFixed(2)} giây`);
+      if (player && player.getCurrentTime) {
+        console.log(`Thời gian hiện tại (Player ${playerId}): ${player.getCurrentTime().toFixed(2)} giây`);
+      }
 
-      if (event.data === 0 && playerId === (isPlayer1Active ? 1 : 2)) {
-        const currentPlayer = isPlayer1Active ? player1 : player2;
-        if (currentPlayer.getPlaylistIndex() + 1 >= currentPlayer.getPlaylist().length) {
-          console.log(`Playlist ${playerId} đã kết thúc, chuyển sang Playlist ${isPlayer1Active ? 2 : 1}.`);
-          isPlayer1Active = !isPlayer1Active;
-          if (player1 && player1.pauseVideo) player1.pauseVideo();
-          if (player2 && player2.pauseVideo) player2.pauseVideo();
-          if (isPlayer1Active && player1 && player1.playVideo) player1.playVideo();
-          else if (!isPlayer1Active && player2 && player2.playVideo) player2.playVideo();
-          updateProgressVisibility();
+      if (event.data === 0 && playerId === activePlayer) {
+        try {
+          const currentPlayer = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+          if (currentPlayer.getPlaylistIndex() + 1 >= currentPlayer.getPlaylist().length) {
+            console.log(`Playlist ${playerId} đã kết thúc, chuyển sang Playlist ${(activePlayer % 3) + 1}.`);
+            activePlayer = (activePlayer % 3) + 1;
+            if (player1 && player1.pauseVideo) player1.pauseVideo();
+            if (player2 && player2.pauseVideo) player2.pauseVideo();
+            if (player3 && player3.pauseVideo) player3.pauseVideo();
+            if (activePlayer === 1 && player1 && player1.playVideo) player1.playVideo();
+            else if (activePlayer === 2 && player2 && player2.playVideo) player2.playVideo();
+            else if (activePlayer === 3 && player3 && player3.playVideo) player3.playVideo();
+            updateProgressVisibility();
+          }
+        } catch (e) {
+          console.error(`Lỗi khi chuyển playlist (Player ${playerId}):`, e);
         }
       }
 
       if (event.data === 1 || event.data === 3) {
-        const duration = player.getDuration();
-        if (playerId === 1) {
-          duration1 = duration;
-          document.getElementById('duration1').textContent = formatTime(duration);
-        } else {
-          duration2 = duration;
-          document.getElementById('duration2').textContent = formatTime(duration);
+        try {
+          const duration = player.getDuration() || 0;
+          if (playerId === 1) {
+            duration1 = duration;
+            document.getElementById('duration1').textContent = formatTime(duration);
+          } else if (playerId === 2) {
+            duration2 = duration;
+            document.getElementById('duration2').textContent = formatTime(duration);
+          } else {
+            duration3 = duration;
+            document.getElementById('duration3').textContent = formatTime(duration);
+          }
+        } catch (e) {
+          console.error(`Lỗi khi cập nhật thời lượng (Player ${playerId}):`, e);
         }
       }
     }
 
     function updateProgressVisibility() {
-      const progress1 = document.getElementById('progress1Container');
-      const progress2 = document.getElementById('progress2Container');
-      progress1.style.transition = 'opacity 0.4s ease';
-      progress2.style.transition = 'opacity 0.4s ease';
-      progress1.style.opacity = isPlayer1Active ? '1' : '0';
-      progress2.style.opacity = isPlayer1Active ? '0' : '1';
-      progress1.style.display = isPlayer1Active ? 'block' : 'none';
-      progress2.style.display = isPlayer1Active ? 'none' : 'block';
+      try {
+        const progress1 = document.getElementById('progress1Container');
+        const progress2 = document.getElementById('progress2Container');
+        const progress3 = document.getElementById('progress3Container');
+        progress1.style.transition = 'opacity 0.4s ease';
+        progress2.style.transition = 'opacity 0.4s ease';
+        progress3.style.transition = 'opacity 0.4s ease';
+        progress1.style.opacity = activePlayer === 1 ? '1' : '0';
+        progress2.style.opacity = activePlayer === 2 ? '1' : '0';
+        progress3.style.opacity = activePlayer === 3 ? '1' : '0';
+        progress1.style.display = activePlayer === 1 ? 'block' : 'none';
+        progress2.style.display = activePlayer === 2 ? 'block' : 'none';
+        progress3.style.display = activePlayer === 3 ? 'block' : 'none';
+      } catch (e) {
+        console.error('Lỗi khi cập nhật giao diện tiến trình:', e);
+      }
     }
 
     function playAudio() {
-      if (isPlayer1Active && player1 && player1.playVideo) {
-        player1.playVideo();
-      } else if (player2 && player2.playVideo) {
-        player2.playVideo();
+      try {
+        if (activePlayer === 1 && player1 && player1.playVideo) {
+          player1.playVideo();
+        } else if (activePlayer === 2 && player2 && player2.playVideo) {
+          player2.playVideo();
+        } else if (activePlayer === 3 && player3 && player3.playVideo) {
+          player3.playVideo();
+        }
+        startProgressUpdates();
+      } catch (e) {
+        console.error('Lỗi khi phát audio:', e);
       }
-      startProgressUpdates();
     }
 
     function pauseAudio() {
-      if (player1 && player1.pauseVideo) player1.pauseVideo();
-      if (player2 && player2.pauseVideo) player2.pauseVideo();
+      try {
+        if (player1 && player1.pauseVideo) player1.pauseVideo();
+        if (player2 && player2.pauseVideo) player2.pauseVideo();
+        if (player3 && player3.pauseVideo) player3.pauseVideo();
+      } catch (e) {
+        console.error('Lỗi khi tạm dừng audio:', e);
+      }
     }
 
     function nextVideo() {
-      if (isPlayer1Active && player1 && player1.nextVideo) {
-        player1.nextVideo();
-      } else if (player2 && player2.nextVideo) {
-        player2.nextVideo();
+      try {
+        if (activePlayer === 1 && player1 && player1.nextVideo) {
+          player1.nextVideo();
+        } else if (activePlayer === 2 && player2 && player2.nextVideo) {
+          player2.nextVideo();
+        } else if (activePlayer === 3 && player3 && player3.nextVideo) {
+          player3.nextVideo();
+        }
+      } catch (e) {
+        console.error('Lỗi khi chuyển bài tiếp:', e);
       }
     }
 
     function previousVideo() {
-      if (isPlayer1Active && player1 && player1.previousVideo) {
-        player1.previousVideo();
-      } else if (player2 && player2.previousVideo) {
-        player2.previousVideo();
+      try {
+        if (activePlayer === 1 && player1 && player1.previousVideo) {
+          player1.previousVideo();
+        } else if (activePlayer === 2 && player2 && player2.previousVideo) {
+          player2.previousVideo();
+        } else if (activePlayer === 3 && player3 && player3.previousVideo) {
+          player3.previousVideo();
+        }
+      } catch (e) {
+        console.error('Lỗi khi chuyển bài trước:', e);
       }
     }
 
     function adjustVolume(value) {
-      const youtubeVolume = Math.min(value * 100 / 3.5, 100); // Scale 0-3.5 to 0-100 for YouTube
-      const gainValue = Math.min(value, 3.5); // Cap gain at 3.5 to prevent excessive amplification
-      if (player1 && player1.setVolume) player1.setVolume(youtubeVolume);
-      if (player2 && player2.setVolume) player2.setVolume(youtubeVolume);
-      if (audioContext) {
-        if (gainNode1) gainNode1.gain.setValueAtTime(gainValue, audioContext.currentTime);
-        if (gainNode2) gainNode2.gain.setValueAtTime(gainValue, audioContext.currentTime);
-      }
-      // Warn about potential distortion
-      if (value > 2) {
-        console.warn('Âm lượng trên 200% có thể gây méo tiếng. Vui lòng kiểm tra chất lượng âm thanh.');
+      try {
+        const youtubeVolume = Math.min(value * 100 / 3.5, 100);
+        const gainValue = Math.min(value, 3.5);
+        if (player1 && player1.setVolume) player1.setVolume(youtubeVolume);
+        if (player2 && player2.setVolume) player2.setVolume(youtubeVolume);
+        if (player3 && player3.setVolume) player3.setVolume(youtubeVolume);
+        if (audioContext) {
+          if (gainNode1) gainNode1.gain.setValueAtTime(gainValue, audioContext.currentTime);
+          if (gainNode2) gainNode2.gain.setValueAtTime(gainValue, audioContext.currentTime);
+          if (gainNode3) gainNode3.gain.setValueAtTime(gainValue, audioContext.currentTime);
+        }
+        if (value > 2) {
+          console.warn('Âm lượng trên 200% có thể gây méo tiếng. Vui lòng kiểm tra chất lượng âm thanh.');
+        }
+      } catch (e) {
+        console.error('Lỗi khi điều chỉnh âm lượng:', e);
       }
     }
 
     function seekTo(playerId, value) {
-      const player = playerId === 1 ? player1 : player2;
-      const duration = playerId === 1 ? duration1 : duration2;
-      if (player && player.seekTo) {
-        const seconds = (value / 100) * duration;
-        player.seekTo(seconds, true);
+      try {
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        const duration = playerId === 1 ? duration1 : playerId === 2 ? duration2 : duration3;
+        if (player && player.seekTo) {
+          const seconds = (value / 100) * duration;
+          player.seekTo(seconds, true);
+        }
+      } catch (e) {
+        console.error(`Lỗi khi tua đến (Player ${playerId}):`, e);
       }
     }
 
     function updateProgress(playerId) {
-      const player = playerId === 1 ? player1 : player2;
-      const duration = playerId === 1 ? duration1 : duration2;
-      if (player && player.getCurrentTime && (playerId === 1) === isPlayer1Active) {
-        const currentTime = player.getCurrentTime();
-        document.getElementById(`currentTime${playerId}`).textContent = formatTime(currentTime);
-        document.getElementById(`progress${playerId}`).value = duration ? (currentTime / duration) * 100 : 0;
+      try {
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        const duration = playerId === 1 ? duration1 : playerId === 2 ? duration2 : duration3;
+        if (player && player.getCurrentTime && playerId === activePlayer) {
+          const currentTime = player.getCurrentTime();
+          document.getElementById(`currentTime${playerId}`).textContent = formatTime(currentTime);
+          document.getElementById(`progress${playerId}`).value = duration ? (currentTime / duration) * 100 : 0;
+        }
+      } catch (e) {
+        console.error(`Lỗi khi cập nhật tiến trình (Player ${playerId}):`, e);
       }
     }
 
@@ -788,6 +863,7 @@
         }
         updateProgress(1);
         updateProgress(2);
+        updateProgress(3);
         updateProgressHandle = requestAnimationFrame(loop);
       }
       updateProgressHandle = requestAnimationFrame(loop);
@@ -800,102 +876,82 @@
     }
 
     function logPlayerInfo(playerId) {
-      const player = playerId === 1 ? player1 : player2;
-      if (player && player.getDuration) {
-        console.log(`Thông tin video (Player ${playerId}):`);
-        console.log(`Tiêu đề: Playlist ${playerId}`);
-        console.log(`URL: ${player.getVideoUrl() || (playerId === 1 ? 'https://www.youtube.com/watch?v=vgDGRHSEWls' : 'https://www.youtube.com/watch?v=gze7WfLyxfE')}`);
-        console.log(`Thời lượng: ${player.getDuration().toFixed(2)} giây`);
-        console.log(`Thời gian hiện tại: ${player.getCurrentTime().toFixed(2)} giây`);
-        console.log(`Âm lượng: ${player.getVolume()}`);
-        console.log(`Trạng thái: ${player.getPlayerState()}`);
+      try {
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        if (player && player.getDuration) {
+          console.log(`Thông tin video (Player ${playerId}):`);
+          console.log(`Tiêu đề: Playlist ${playerId}`);
+          console.log(`URL: ${player.getVideoUrl() || (playerId === 1 ? 'https://www.youtube.com/watch?v=vgDGRHSEWls' : playerId === 2 ? 'https://www.youtube.com/watch?v=gze7WfLyxfE' : 'https://www.youtube.com/watch?v=OuNo8Tkb3lI')}`);
+          console.log(`Thời lượng: ${player.getDuration().toFixed(2)} giây`);
+          console.log(`Thời gian hiện tại: ${player.getCurrentTime().toFixed(2)} giây`);
+          console.log(`Âm lượng: ${player.getVolume()}`);
+          console.log(`Trạng thái: ${player.getPlayerState()}`);
+        }
+      } catch (e) {
+        console.error(`Lỗi khi ghi log thông tin (Player ${playerId}):`, e);
       }
-    }
-
-    function updatePlaylist(playerId) {
-      const input = document.getElementById(`customPlaylist${playerId}`);
-      const url = input.value.trim();
-      if (!url) {
-        alert('Vui lòng nhập URL playlist!');
-        return;
-      }
-
-      const playlistIdMatch = url.match(/(?:list=)([a-zA-Z0-9_-]+)/);
-      if (!playlistIdMatch) {
-        alert('URL playlist không hợp lệ!');
-        return;
-      }
-
-      const playlistId = playlistIdMatch[1];
-      const iframe = document.getElementById(`youtubePlayer${playerId}`);
-      const newSrc = `https://www.youtube.com/embed/videoseries?list=${playlistId}&enablejsapi=1`;
-      iframe.src = newSrc;
-      iframe.dataset.src = newSrc;
-
-      if (playerId === 1 && player1) {
-        player1.destroy();
-        player1 = null;
-      } else if (playerId === 2 && player2) {
-        player2.destroy();
-        player2 = null;
-      }
-
-      playerId === 1
-        ? (player1 = new YT.Player(`youtubePlayer${playerId}`, {
-            events: {
-              'onReady': (event) => onPlayerReady(event, playerId),
-              'onStateChange': (event) => onPlayerStateChange(event, playerId),
-            },
-          }))
-        : (player2 = new YT.Player(`youtubePlayer${playerId}`, {
-            events: {
-              'onReady': (event) => onPlayerReady(event, playerId),
-              'onStateChange': (event) => onPlayerStateChange(event, playerId),
-            },
-          }));
-
-      input.value = '';
-      console.log(`Cập nhật Playlist ${playerId} với URL: ${newSrc}`);
     }
 
     // Toggle player
     document.getElementById('togglePlayerBtn').addEventListener('click', () => {
-      const playerContainer = document.getElementById('playerContainer');
-      if (!playerContainer.classList.contains('active') && !youtubeApiLoaded) {
-        const iframe1 = document.getElementById('youtubePlayer1');
-        const iframe2 = document.getElementById('youtubePlayer2');
-        iframe1.src = iframe1.dataset.src;
-        iframe2.src = iframe2.dataset.src;
-        loadYouTubePlayer();
-      }
-      playerContainer.classList.toggle('active');
-
-      if (playerContainer.classList.contains('active')) {
-        const selectedPlaylist = document.getElementById('playlistSelector').value;
-        isPlayer1Active = selectedPlaylist === '1';
-        updateProgressVisibility();
-        if (isPlayer1Active && player1 && player1.playVideo) {
-          player1.playVideo();
-          if (player2 && player2.pauseVideo) player2.pauseVideo();
-        } else if (!isPlayer1Active && player2 && player2.playVideo) {
-          player2.playVideo();
-          if (player1 && player1.pauseVideo) player1.pauseVideo();
+      try {
+        const playerContainer = document.getElementById('playerContainer');
+        if (!playerContainer.classList.contains('active') && !youtubeApiLoaded) {
+          const iframe1 = document.getElementById('youtubePlayer1');
+          const iframe2 = document.getElementById('youtubePlayer2');
+          const iframe3 = document.getElementById('youtubePlayer3');
+          iframe1.src = iframe1.dataset.src;
+          iframe2.src = iframe2.dataset.src;
+          iframe3.src = iframe3.dataset.src;
+          loadYouTubePlayer();
         }
-      } else {
-        pauseAudio();
+        playerContainer.classList.toggle('active');
+
+        if (playerContainer.classList.contains('active')) {
+          const selectedPlaylist = document.getElementById('playlistSelector').value;
+          activePlayer = parseInt(selectedPlaylist);
+          updateProgressVisibility();
+          if (activePlayer === 1 && player1 && player1.playVideo) {
+            player1.playVideo();
+            if (player2 && player2.pauseVideo) player2.pauseVideo();
+            if (player3 && player3.pauseVideo) player3.pauseVideo();
+          } else if (activePlayer === 2 && player2 && player2.playVideo) {
+            player2.playVideo();
+            if (player1 && player1.pauseVideo) player1.pauseVideo();
+            if (player3 && player3.pauseVideo) player3.pauseVideo();
+          } else if (activePlayer === 3 && player3 && player3.playVideo) {
+            player3.playVideo();
+            if (player1 && player1.pauseVideo) player1.pauseVideo();
+            if (player2 && player2.pauseVideo) player2.pauseVideo();
+          }
+        } else {
+          pauseAudio();
+        }
+      } catch (e) {
+        console.error('Lỗi khi toggle player:', e);
       }
     });
 
     // Playlist selector
     document.getElementById('playlistSelector').addEventListener('change', (event) => {
-      isPlayer1Active = event.target.value === '1';
-      updateProgressVisibility();
-      if (isPlayer1Active) {
-        if (player1 && player1.playVideo) player1.playVideo();
-        if (player2 && player2.pauseVideo) player2.pauseVideo();
-      } else {
-        if (player2 && player2.playVideo) player2.playVideo();
-        if (player1 && player1.pauseVideo) player1.pauseVideo();
+      try {
+        activePlayer = parseInt(event.target.value);
+        updateProgressVisibility();
+        if (activePlayer === 1) {
+          if (player1 && player1.playVideo) player1.playVideo();
+          if (player2 && player2.pauseVideo) player2.pauseVideo();
+          if (player3 && player3.pauseVideo) player3.pauseVideo();
+        } else if (activePlayer === 2) {
+          if (player2 && player2.playVideo) player2.playVideo();
+          if (player1 && player1.pauseVideo) player1.pauseVideo();
+          if (player3 && player3.pauseVideo) player3.pauseVideo();
+        } else if (activePlayer === 3) {
+          if (player3 && player3.playVideo) player3.playVideo();
+          if (player1 && player1.pauseVideo) player1.pauseVideo();
+          if (player2 && player2.pauseVideo) player2.pauseVideo();
+        }
+      } catch (e) {
+        console.error('Lỗi khi thay đổi playlist:', e);
       }
     });
 
@@ -910,7 +966,7 @@
       idleTimeout = setTimeout(() => {
         document.getElementById('particles-js').classList.remove('active');
         particlesActive = false;
-      }, 300000); // 5 minutes
+      }, 300000);
     }
 
     document.addEventListener('mousemove', resetIdleTimer);
