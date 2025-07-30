@@ -164,7 +164,6 @@
       transform: translateX(-50%) translateY(-10px);
     }
 
-    /* Trình phát âm thanh */
     .player-container {
       position: fixed;
       bottom: 15px;
@@ -238,7 +237,6 @@
       box-shadow: 0 0 12px #00ff00;
     }
 
-    /* Nút bật/tắt trình phát */
     .toggle-player-btn {
       position: fixed;
       top: 15px;
@@ -339,8 +337,16 @@
     <h3>Playlist</h3>
     <div class="video-container">
       <iframe
-        id="youtubePlayer"
-        data-src="https://www.youtube.com/watch?v=gze7WfLyxfE&list=RDgze7WfLyxfE&index=1&enablejsapi=1"
+        id="youtubePlayer1"
+        data-src="https://www.youtube.com/embed/videoseries?list=RDvgDGRHSEWls&enablejsapi=1"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+      <iframe
+        id="youtubePlayer2"
+        data-src="https://www.youtube.com/embed/videoseries?list=RDgze7WfLyxfE&enablejsapi=1"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
@@ -358,11 +364,19 @@
       <input type="range" id="volume" min="0" max="1" step="0.1" value="1" oninput="adjustVolume(this.value)" class="w-full">
     </div>
     <div>
-      <label for="progress" class="block text-sm font-medium text-green-400 mb-1">Tiến trình</label>
-      <input type="range" id="progress" min="0" max="100" value="0" oninput="seekTo(this.value)" class="w-full">
+      <label for="progress1" class="block text-sm font-medium text-green-400 mb-1">Tiến trình (Playlist 1)</label>
+      <input type="range" id="progress1" min="0" max="100" value="0" oninput="seekTo(1, this.value)" class="w-full">
       <div class="flex justify-between text-xs text-green-400 mt-1">
-        <span id="currentTime">0:00</span>
-        <span id="duration">0:00</span>
+        <span id="currentTime1">0:00</span>
+        <span id="duration1">0:00</span>
+      </div>
+    </div>
+    <div>
+      <label for="progress2" class="block text-sm font-medium text-green-400 mb-1">Tiến trình (Playlist 2)</label>
+      <input type="range" id="progress2" min="0" max="100" value="0" oninput="seekTo(2, this.value)" class="w-full">
+      <div class="flex justify-between text-xs text-green-400 mt-1">
+        <span id="currentTime2">0:00</span>
+        <span id="duration2">0:00</span>
       </div>
     </div>
   </div>
@@ -441,7 +455,7 @@
         const button = document.querySelector(`.star-btn[data-code="${code}"]`);
         button.classList.add('copied');
         setTimeout(() => button.classList.remove('copied'), 800);
-        if (window.innerWidth > 600) { // Chỉ chạy confetti trên màn hình lớn
+        if (window.innerWidth > 600) {
           launchConfetti();
         }
       }).catch(() => {
@@ -449,7 +463,7 @@
       });
     }
 
-    // Hàm chạy hiệu ứng confetti (tối ưu hóa)
+    // Hàm chạy hiệu ứng confetti
     function launchConfetti() {
       import('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js').then((module) => {
         module.default({
@@ -476,41 +490,58 @@
     renderCodeList('backupCodeList', backupCodes);
     renderCodeList('mainAccCodeList', mainAccCodes);
 
-    // Tải YouTube IFrame Player API khi bật trình phát
+    // Tải YouTube IFrame Player API
     let youtubeApiLoaded = false;
-    let player;
-    let duration = 0;
+    let player1, player2;
+    let duration1 = 0, duration2 = 0;
+    let isPlayer1Active = true; // Biến theo dõi trạng thái playlist đang phát
 
     function loadYouTubePlayer() {
       if (!youtubeApiLoaded) {
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0]; // Khai báo firstScriptTag
+        const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
         youtubeApiLoaded = true;
       }
     }
 
     window.onYouTubeIframeAPIReady = function() {
-      player = new YT.Player('youtubePlayer', {
+      player1 = new YT.Player('youtubePlayer1', {
         events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
+          'onReady': (event) => onPlayerReady(event, 1),
+          'onStateChange': (event) => onPlayerStateChange(event, 1)
+        }
+      });
+      player2 = new YT.Player('youtubePlayer2', {
+        events: {
+          'onReady': (event) => onPlayerReady(event, 2),
+          'onStateChange': (event) => onPlayerStateChange(event, 2)
         }
       });
     };
 
-    function onPlayerReady(event) {
+    function onPlayerReady(event, playerId) {
       if (!event.target) return;
+      const player = playerId === 1 ? player1 : player2;
       player.setVolume(100);
-      duration = player.getDuration();
-      document.getElementById('duration').textContent = formatTime(duration);
-      console.log("Trình phát YouTube đã sẵn sàng.");
-      setInterval(updateProgress, 2000); // Giảm tần suất cập nhật
-      setInterval(logPlayerInfo, 2000);
+      if (playerId === 1 && isPlayer1Active) {
+        player.playVideo(); // Phát playlist 1 trước
+      }
+      const duration = player.getDuration();
+      if (playerId === 1) {
+        duration1 = duration;
+        document.getElementById('duration1').textContent = formatTime(duration);
+      } else {
+        duration2 = duration;
+        document.getElementById('duration2').textContent = formatTime(duration);
+      }
+      console.log(`Trình phát ${playerId} đã sẵn sàng.`);
+      setInterval(() => updateProgress(playerId), 2000);
+      setInterval(() => logPlayerInfo(playerId), 2000);
     }
 
-    function onPlayerStateChange(event) {
+    function onPlayerStateChange(event, playerId) {
       const states = {
         '-1': 'Chưa bắt đầu',
         0: 'Kết thúc',
@@ -519,46 +550,82 @@
         3: 'Đang đệm',
         5: 'Video được cued'
       };
-      console.log("Trạng thái trình phát: ", states[event.data]);
-      console.log("Thời gian hiện tại: ", player.getCurrentTime().toFixed(2), "giây");
+      const player = playerId === 1 ? player1 : player2;
+      console.log(`Trạng thái trình phát ${playerId}: ${states[event.data]}`);
+      console.log(`Thời gian hiện tại (Player ${playerId}): ${player.getCurrentTime().toFixed(2)} giây`);
+
+      // Khi playlist 1 kết thúc một video, kiểm tra xem còn video tiếp theo không
+      if (playerId === 1 && event.data === 0 && isPlayer1Active) {
+        if (player1.getPlaylistIndex() + 1 >= player1.getPlaylist().length) {
+          console.log("Playlist 1 đã kết thúc, chuyển sang Playlist 2.");
+          isPlayer1Active = false;
+          if (player1 && player1.pauseVideo) player1.pauseVideo();
+          if (player2 && player2.playVideo) player2.playVideo();
+        }
+      }
+
       if (event.data === 1 || event.data === 3) {
-        duration = player.getDuration();
-        document.getElementById('duration').textContent = formatTime(duration);
+        const duration = player.getDuration();
+        if (playerId === 1) {
+          duration1 = duration;
+          document.getElementById('duration1').textContent = formatTime(duration);
+        } else {
+          duration2 = duration;
+          document.getElementById('duration2').textContent = formatTime(duration);
+        }
       }
     }
 
     function playAudio() {
-      if (player && player.playVideo) player.playVideo();
+      if (isPlayer1Active && player1 && player1.playVideo) {
+        player1.playVideo();
+      } else if (player2 && player2.playVideo) {
+        player2.playVideo();
+      }
     }
 
     function pauseAudio() {
-      if (player && player.pauseVideo) player.pauseVideo();
+      if (player1 && player1.pauseVideo) player1.pauseVideo();
+      if (player2 && player2.pauseVideo) player2.pauseVideo();
     }
 
     function nextVideo() {
-      if (player && player.nextVideo) player.nextVideo();
+      if (isPlayer1Active && player1 && player1.nextVideo) {
+        player1.nextVideo();
+      } else if (player2 && player2.nextVideo) {
+        player2.nextVideo();
+      }
     }
 
     function previousVideo() {
-      if (player && player.previousVideo) player.previousVideo();
+      if (isPlayer1Active && player1 && player1.previousVideo) {
+        player1.previousVideo();
+      } else if (player2 && player2.previousVideo) {
+        player2.previousVideo();
+      }
     }
 
     function adjustVolume(value) {
-      if (player && player.setVolume) player.setVolume(value * 100);
+      if (player1 && player1.setVolume) player1.setVolume(value * 100);
+      if (player2 && player2.setVolume) player2.setVolume(value * 100);
     }
 
-    function seekTo(value) {
+    function seekTo(playerId, value) {
+      const player = playerId === 1 ? player1 : player2;
+      const duration = playerId === 1 ? duration1 : duration2;
       if (player && player.seekTo) {
         const seconds = (value / 100) * duration;
         player.seekTo(seconds, true);
       }
     }
 
-    function updateProgress() {
+    function updateProgress(playerId) {
+      const player = playerId === 1 ? player1 : player2;
+      const duration = playerId === 1 ? duration1 : duration2;
       if (player && player.getCurrentTime) {
         const currentTime = player.getCurrentTime();
-        document.getElementById('currentTime').textContent = formatTime(currentTime);
-        document.getElementById('progress').value = duration ? (currentTime / duration) * 100 : 0;
+        document.getElementById(`currentTime${playerId}`).textContent = formatTime(currentTime);
+        document.getElementById(`progress${playerId}`).value = duration ? (currentTime / duration) * 100 : 0;
       }
     }
 
@@ -568,15 +635,16 @@
       return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
-    function logPlayerInfo() {
+    function logPlayerInfo(playerId) {
+      const player = playerId === 1 ? player1 : player2;
       if (player && player.getDuration) {
-        console.log("Thông tin video:");
-        console.log("Tiêu đề: Playlist (dựa trên tài liệu)");
-        console.log("URL: https://www.youtube.com/watch?v=gze7WfLyxfE (hoặc video hiện tại trong playlist)");
-        console.log("Thời lượng: ", player.getDuration().toFixed(2), "giây");
-        console.log("Thời gian hiện tại: ", player.getCurrentTime().toFixed(2), "giây");
-        console.log("Âm lượng: ", player.getVolume());
-        console.log("Trạng thái: ", player.getPlayerState());
+        console.log(`Thông tin video (Player ${playerId}):`);
+        console.log(`Tiêu đề: Playlist ${playerId}`);
+        console.log(`URL: ${playerId === 1 ? 'https://www.youtube.com/watch?v=vgDGRHSEWls' : 'https://www.youtube.com/watch?v=gze7WfLyxfE'} (hoặc video hiện tại trong playlist)`);
+        console.log(`Thời lượng: ${player.getDuration().toFixed(2)} giây`);
+        console.log(`Thời gian hiện tại: ${player.getCurrentTime().toFixed(2)} giây`);
+        console.log(`Âm lượng: ${player.getVolume()}`);
+        console.log(`Trạng thái: ${player.getPlayerState()}`);
       }
     }
 
@@ -584,8 +652,10 @@
     document.getElementById('togglePlayerBtn').addEventListener('click', () => {
       const playerContainer = document.getElementById('playerContainer');
       if (!playerContainer.classList.contains('active') && !youtubeApiLoaded) {
-        const iframe = document.getElementById('youtubePlayer');
-        iframe.src = iframe.dataset.src;
+        const iframe1 = document.getElementById('youtubePlayer1');
+        const iframe2 = document.getElementById('youtubePlayer2');
+        iframe1.src = iframe1.dataset.src;
+        iframe2.src = iframe2.dataset.src;
         loadYouTubePlayer();
       }
       playerContainer.classList.toggle('active');
