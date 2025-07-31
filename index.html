@@ -241,15 +241,30 @@
       gap: 20px;
     }
 
+    .video-preview {
+      width: 320px;
+      height: 180px;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 10px #00ff00;
+      transition: opacity 0.4s ease;
+    }
+
+    .video-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+
+    .video-preview iframe.active {
+      display: block;
+    }
+
     .playlist-selector, .playback-buttons, .volume-control, .progress-container {
       width: 100%;
       max-width: 400px;
-    }
-
-    .video-container {
-      width: 0;
-      height: 0;
-      overflow: hidden;
     }
 
     input[type="range"] {
@@ -375,6 +390,11 @@
       .player-controls {
         max-width: 100%;
       }
+      .video-preview {
+        width: 100%;
+        max-width: 280px;
+        height: 157.5px; /* Maintain 16:9 aspect ratio */
+      }
       .playlist-selector, .playback-buttons, .volume-control, .progress-container {
         max-width: 100%;
       }
@@ -415,9 +435,35 @@
           <option value="3">Playlist 3</option>
         </select>
       </div>
+      <div class="video-preview">
+        <iframe
+          id="youtubePlayer1"
+          data-src="https://www.youtube.com/embed/videoseries?list=RDvgDGRHSEWls&enablejsapi=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+        <iframe
+          id="youtubePlayer2"
+          data-src="https://www.youtube.com/embed/videoseries?list=RDgze7WfLyxfE&enablejsapi=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+        <iframe
+          id="youtubePlayer3"
+          data-src="https://www.youtube.com/embed/videoseries?list=RDOuNo8Tkb3lI&enablejsapi=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
       <div class="playback-buttons">
-        <button onclick="playAudio()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Phát</button>
-        <button onclick="pauseAudio()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Tạm Dừng</button>
+        <button onclick="playVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Phát</button>
+        <button onclick="pauseVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Tạm Dừng</button>
         <button onclick="nextVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Bài Tiếp</button>
         <button onclick="previousVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Bài Trước</button>
       </div>
@@ -450,32 +496,6 @@
         </div>
       </div>
     </div>
-    <div class="video-container">
-      <iframe
-        id="youtubePlayer1"
-        data-src="https://www.youtube.com/embed/videoseries?list=RDvgDGRHSEWls&enablejsapi=1"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy"
-      ></iframe>
-      <iframe
-        id="youtubePlayer2"
-        data-src="https://www.youtube.com/embed/videoseries?list=RDgze7WfLyxfE&enablejsapi=1"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy"
-      ></iframe>
-      <iframe
-        id="youtubePlayer3"
-        data-src="https://www.youtube.com/embed/videoseries?list=RDOuNo8Tkb3lI&enablejsapi=1"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        loading="lazy"
-      ></iframe>
-    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
@@ -483,23 +503,27 @@
     // Initialize particles.js only when visible
     let particlesActive = true;
     function initParticles() {
-      particlesJS('particles-js', {
-        particles: {
-          number: { value: 30, density: { enable: true, value_area: 1500 } },
-          color: { value: ['#ffffff', '#ffd700', '#ff6f61'] },
-          shape: { type: 'circle' },
-          opacity: { value: 0.3, random: true },
-          size: { value: 2, random: true },
-          line_linked: { enable: false },
-          move: { enable: true, speed: 1, direction: 'none', random: true }
-        },
-        interactivity: {
-          detect_on: 'canvas',
-          events: { onhover: { enable: false }, onclick: { enable: false } }
-        },
-        retina_detect: true
-      });
-      document.getElementById('particles-js').classList.add('active');
+      try {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 30, density: { enable: true, value_area: 1500 } },
+            color: { value: ['#ffffff', '#ffd700', '#ff6f61'] },
+            shape: { type: 'circle' },
+            opacity: { value: 0.3, random: true },
+            size: { value: 2, random: true },
+            line_linked: { enable: false },
+            move: { enable: true, speed: 1, direction: 'none', random: true }
+          },
+          interactivity: {
+            detect_on: 'canvas',
+            events: { onhover: { enable: false }, onclick: { enable: false } }
+          },
+          retina_detect: true
+        });
+        document.getElementById('particles-js').classList.add('active');
+      } catch (e) {
+        console.error('Lỗi khi khởi tạo particles.js:', e);
+      }
     }
 
     // Danh sách mã
@@ -512,20 +536,24 @@
     ];
 
     function renderCodeList(containerId, codeList) {
-      const codeListContainer = document.getElementById(containerId);
-      codeListContainer.innerHTML = '';
-      codeList.forEach((code, index) => {
-        const div = document.createElement('div');
-        div.className = 'code-item';
-        div.style.animationDelay = `${index * 0.1}s`;
-        div.innerHTML = `
-          <span class="code">${code}</span>
-          <button class="star-btn" data-code="${code}" title="Sao chép mã">
-            <i class="fas fa-star"></i>
-          </button>
-        `;
-        codeListContainer.appendChild(div);
-      });
+      try {
+        const codeListContainer = document.getElementById(containerId);
+        codeListContainer.innerHTML = '';
+        codeList.forEach((code, index) => {
+          const div = document.createElement('div');
+          div.className = 'code-item';
+          div.style.animationDelay = `${index * 0.1}s`;
+          div.innerHTML = `
+            <span class="code">${code}</span>
+            <button class="star-btn" data-code="${code}" title="Sao chép mã">
+              <i class="fas fa-star"></i>
+            </button>
+          `;
+          codeListContainer.appendChild(div);
+        });
+      } catch (e) {
+        console.error('Lỗi khi render danh sách mã:', e);
+      }
     }
 
     // Debounce function
@@ -539,42 +567,54 @@
 
     // Copy code with debounce
     const copyCode = debounce((code) => {
-      navigator.clipboard.writeText(code).then(() => {
-        const toast = document.getElementById('copyToast');
-        toast.textContent = `Đã sao chép: ${code}`;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
-        const button = document.querySelector(`.star-btn[data-code="${code}"]`);
-        button.classList.add('copied');
-        setTimeout(() => button.classList.remove('copied'), 800);
-        if (window.innerWidth > 600) {
-          launchConfetti();
-        }
-      }).catch(() => {
-        alert('Lỗi khi sao chép mã!');
-      });
+      try {
+        navigator.clipboard.writeText(code).then(() => {
+          const toast = document.getElementById('copyToast');
+          toast.textContent = `Đã sao chép: ${code}`;
+          toast.classList.add('show');
+          setTimeout(() => toast.classList.remove('show'), 2000);
+          const button = document.querySelector(`.star-btn[data-code="${code}"]`);
+          button.classList.add('copied');
+          setTimeout(() => button.classList.remove('copied'), 800);
+          if (window.innerWidth > 600) {
+            launchConfetti();
+          }
+        }).catch(() => {
+          alert('Lỗi khi sao chép mã!');
+        });
+      } catch (e) {
+        console.error('Lỗi khi sao chép mã:', e);
+      }
     }, 300);
 
     // Confetti effect
     function launchConfetti() {
-      import('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js').then((module) => {
-        module.default({
-          particleCount: 40,
-          spread: 40,
-          origin: { y: 0.5 },
-          colors: ['#ffd700', '#ff6f61'],
-          scalar: 0.7,
-          gravity: 0.2,
-          ticks: 100
+      try {
+        import('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js').then((module) => {
+          module.default({
+            particleCount: 40,
+            spread: 40,
+            origin: { y: 0.5 },
+            colors: ['#ffd700', '#ff6f61'],
+            scalar: 0.7,
+            gravity: 0.2,
+            ticks: 100
+          });
         });
-      });
+      } catch (e) {
+        console.error('Lỗi khi kích hoạt confetti:', e);
+      }
     }
 
     // Add click event for copy buttons
     document.addEventListener('click', (event) => {
-      if (event.target.closest('.star-btn')) {
-        const code = event.target.closest('.star-btn').dataset.code;
-        copyCode(code);
+      try {
+        if (event.target.closest('.star-btn')) {
+          const code = event.target.closest('.star-btn').dataset.code;
+          copyCode(code);
+        }
+      } catch (e) {
+        console.error('Lỗi khi xử lý sự kiện click star-btn:', e);
       }
     });
 
@@ -589,15 +629,16 @@
     let gainNode3 = null;
 
     function setupAudioContext() {
-      if (!audioContext) {
-        try {
+      try {
+        if (!audioContext) {
           audioContext = new (window.AudioContext || window.webkitAudioContext)();
           gainNode1 = audioContext.createGain();
           gainNode2 = audioContext.createGain();
           gainNode3 = audioContext.createGain();
-        } catch (e) {
-          console.error('Lỗi khi khởi tạo AudioContext:', e);
+          console.log('AudioContext khởi tạo thành công.');
         }
+      } catch (e) {
+        console.error('Lỗi khi khởi tạo AudioContext:', e);
       }
     }
 
@@ -609,18 +650,23 @@
     let updateProgressHandle = null;
 
     function loadYouTubePlayer() {
-      if (!youtubeApiLoaded) {
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        youtubeApiLoaded = true;
+      try {
+        if (!youtubeApiLoaded) {
+          const tag = document.createElement('script');
+          tag.src = "https://www.youtube.com/iframe_api";
+          const firstScriptTag = document.getElementsByTagName('script')[0];
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+          youtubeApiLoaded = true;
+          console.log('YouTube IFrame API được tải.');
+        }
+      } catch (e) {
+        console.error('Lỗi khi tải YouTube IFrame API:', e);
       }
     }
 
     window.onYouTubeIframeAPIReady = function () {
-      setupAudioContext();
       try {
+        setupAudioContext();
         player1 = new YT.Player('youtubePlayer1', {
           events: {
             'onReady': (event) => onPlayerReady(event, 1),
@@ -642,24 +688,28 @@
             'onError': (event) => console.error(`Lỗi Player 3: ${event.data}`),
           },
         });
+        console.log('YouTube Players khởi tạo thành công.');
       } catch (e) {
         console.error('Lỗi khi khởi tạo YouTube Player:', e);
       }
     };
 
     function onPlayerReady(event, playerId) {
-      if (!event.target) return;
-      const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
-      const iframe = document.getElementById(`youtubePlayer${playerId}`);
       try {
-        const mediaElement = iframe.contentWindow.document.querySelector('video');
-        if (mediaElement && audioContext) {
-          const source = audioContext.createMediaElementSource(mediaElement);
-          const gainNode = playerId === 1 ? gainNode1 : playerId === 2 ? gainNode2 : gainNode3;
-          source.connect(gainNode);
-          gainNode.connect(audioContext.destination);
-          gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+        if (!event.target) {
+          console.error(`Lỗi: Player ${playerId} không có target.`);
+          return;
         }
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        const iframe = document.getElementById(`youtubePlayer${playerId}`);
+        
+        // Check iframe readiness
+        if (!iframe || !iframe.contentWindow) {
+          console.error(`Lỗi: Iframe Player ${playerId} chưa tải xong hoặc không tồn tại.`);
+          return;
+        }
+
+        // Set volume and duration
         player.setVolume(100);
         const duration = player.getDuration() || 0;
         if (playerId === 1) {
@@ -672,33 +722,71 @@
           duration3 = duration;
           document.getElementById('duration3').textContent = formatTime(duration);
         }
-        console.log(`Trình phát ${playerId} đã sẵn sàng.`);
+
+        // Connect AudioContext if available
+        if (audioContext && audioContext.state !== 'suspended') {
+          const mediaElement = iframe.contentWindow.document.querySelector('video');
+          if (mediaElement) {
+            const source = audioContext.createMediaElementSource(mediaElement);
+            const gainNode = playerId === 1 ? gainNode1 : playerId === 2 ? gainNode2 : gainNode3;
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.setValueAtTime(1, audioContext.currentTime);
+            console.log(`AudioContext kết nối thành công cho Player ${playerId}.`);
+          } else {
+            console.warn(`Không tìm thấy video element cho Player ${playerId}.`);
+          }
+        } else {
+          console.warn(`AudioContext không khả dụng hoặc bị tạm dừng cho Player ${playerId}.`);
+        }
+
+        console.log(`Trình phát ${playerId} đã sẵn sàng với thời lượng ${duration}s.`);
         updateProgressVisibility();
         if (!updateProgressHandle) {
           startProgressUpdates();
         }
       } catch (e) {
         console.error(`Lỗi khi xử lý Player ${playerId} sẵn sàng:`, e);
+        // Fallback: Initialize without AudioContext
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        if (player) {
+          player.setVolume(100);
+          const duration = player.getDuration() || 0;
+          if (playerId === 1) {
+            duration1 = duration;
+            document.getElementById('duration1').textContent = formatTime(duration);
+          } else if (playerId === 2) {
+            duration2 = duration;
+            document.getElementById('duration2').textContent = formatTime(duration);
+          } else {
+            duration3 = duration;
+            document.getElementById('duration3').textContent = formatTime(duration);
+          }
+          updateProgressVisibility();
+          if (!updateProgressHandle) {
+            startProgressUpdates();
+          }
+        }
       }
     }
 
     function onPlayerStateChange(event, playerId) {
-      const states = {
-        '-1': 'Chưa bắt đầu',
-        0: 'Kết thúc',
-        1: 'Đang phát',
-        2: 'Tạm dừng',
-        3: 'Đang đệm',
-        5: 'Video được cued',
-      };
-      const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
-      console.log(`Trạng thái trình phát ${playerId}: ${states[event.data]}`);
-      if (player && player.getCurrentTime) {
-        console.log(`Thời gian hiện tại (Player ${playerId}): ${player.getCurrentTime().toFixed(2)} giây`);
-      }
+      try {
+        const states = {
+          '-1': 'Chưa bắt đầu',
+          0: 'Kết thúc',
+          1: 'Đang phát',
+          2: 'Tạm dừng',
+          3: 'Đang đệm',
+          5: 'Video được cued',
+        };
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        console.log(`Trạng thái trình phát ${playerId}: ${states[event.data]}`);
+        if (player && player.getCurrentTime) {
+          console.log(`Thời gian hiện tại (Player ${playerId}): ${player.getCurrentTime().toFixed(2)} giây`);
+        }
 
-      if (event.data === 0 && playerId === activePlayer) {
-        try {
+        if (event.data === 0 && playerId === activePlayer) {
           const currentPlayer = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
           if (currentPlayer.getPlaylistIndex() + 1 >= currentPlayer.getPlaylist().length) {
             console.log(`Playlist ${playerId} đã kết thúc, chuyển sang Playlist ${(activePlayer % 3) + 1}.`);
@@ -711,13 +799,9 @@
             else if (activePlayer === 3 && player3 && player3.playVideo) player3.playVideo();
             updateProgressVisibility();
           }
-        } catch (e) {
-          console.error(`Lỗi khi chuyển playlist (Player ${playerId}):`, e);
         }
-      }
 
-      if (event.data === 1 || event.data === 3) {
-        try {
+        if (event.data === 1 || event.data === 3) {
           const duration = player.getDuration() || 0;
           if (playerId === 1) {
             duration1 = duration;
@@ -729,9 +813,9 @@
             duration3 = duration;
             document.getElementById('duration3').textContent = formatTime(duration);
           }
-        } catch (e) {
-          console.error(`Lỗi khi cập nhật thời lượng (Player ${playerId}):`, e);
         }
+      } catch (e) {
+        console.error(`Lỗi khi xử lý trạng thái Player ${playerId}:`, e);
       }
     }
 
@@ -740,6 +824,9 @@
         const progress1 = document.getElementById('progress1Container');
         const progress2 = document.getElementById('progress2Container');
         const progress3 = document.getElementById('progress3Container');
+        const iframe1 = document.getElementById('youtubePlayer1');
+        const iframe2 = document.getElementById('youtubePlayer2');
+        const iframe3 = document.getElementById('youtubePlayer3');
         progress1.style.transition = 'opacity 0.4s ease';
         progress2.style.transition = 'opacity 0.4s ease';
         progress3.style.transition = 'opacity 0.4s ease';
@@ -749,13 +836,22 @@
         progress1.style.display = activePlayer === 1 ? 'block' : 'none';
         progress2.style.display = activePlayer === 2 ? 'block' : 'none';
         progress3.style.display = activePlayer === 3 ? 'block' : 'none';
+        iframe1.classList.toggle('active', activePlayer === 1);
+        iframe2.classList.toggle('active', activePlayer === 2);
+        iframe3.classList.toggle('active', activePlayer === 3);
+        console.log(`Cập nhật giao diện: Active Player ${activePlayer}`);
       } catch (e) {
-        console.error('Lỗi khi cập nhật giao diện tiến trình:', e);
+        console.error('Lỗi khi cập nhật giao diện tiến trình và video:', e);
       }
     }
 
-    function playAudio() {
+    function playVideo() {
       try {
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume().then(() => {
+            console.log('AudioContext đã được tiếp tục.');
+          });
+        }
         if (activePlayer === 1 && player1 && player1.playVideo) {
           player1.playVideo();
         } else if (activePlayer === 2 && player2 && player2.playVideo) {
@@ -765,17 +861,17 @@
         }
         startProgressUpdates();
       } catch (e) {
-        console.error('Lỗi khi phát audio:', e);
+        console.error('Lỗi khi phát video:', e);
       }
     }
 
-    function pauseAudio() {
+    function pauseVideo() {
       try {
         if (player1 && player1.pauseVideo) player1.pauseVideo();
         if (player2 && player2.pauseVideo) player2.pauseVideo();
         if (player3 && player3.pauseVideo) player3.pauseVideo();
       } catch (e) {
-        console.error('Lỗi khi tạm dừng audio:', e);
+        console.error('Lỗi khi tạm dừng video:', e);
       }
     }
 
@@ -855,24 +951,33 @@
     }
 
     function startProgressUpdates() {
-      if (updateProgressHandle) cancelAnimationFrame(updateProgressHandle);
-      function loop() {
-        if (document.hidden || !document.getElementById('playerContainer').classList.contains('active')) {
-          updateProgressHandle = null;
-          return;
+      try {
+        if (updateProgressHandle) cancelAnimationFrame(updateProgressHandle);
+        function loop() {
+          if (document.hidden || !document.getElementById('playerContainer').classList.contains('active')) {
+            updateProgressHandle = null;
+            return;
+          }
+          updateProgress(1);
+          updateProgress(2);
+          updateProgress(3);
+          updateProgressHandle = requestAnimationFrame(loop);
         }
-        updateProgress(1);
-        updateProgress(2);
-        updateProgress(3);
         updateProgressHandle = requestAnimationFrame(loop);
+      } catch (e) {
+        console.error('Lỗi khi bắt đầu cập nhật tiến trình:', e);
       }
-      updateProgressHandle = requestAnimationFrame(loop);
     }
 
     function formatTime(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+      try {
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+      } catch (e) {
+        console.error('Lỗi khi format thời gian:', e);
+        return '0:00';
+      }
     }
 
     function logPlayerInfo(playerId) {
@@ -886,6 +991,8 @@
           console.log(`Thời gian hiện tại: ${player.getCurrentTime().toFixed(2)} giây`);
           console.log(`Âm lượng: ${player.getVolume()}`);
           console.log(`Trạng thái: ${player.getPlayerState()}`);
+        } else {
+          console.error(`Player ${playerId} chưa được khởi tạo hoặc không có getDuration.`);
         }
       } catch (e) {
         console.error(`Lỗi khi ghi log thông tin (Player ${playerId}):`, e);
@@ -900,10 +1007,15 @@
           const iframe1 = document.getElementById('youtubePlayer1');
           const iframe2 = document.getElementById('youtubePlayer2');
           const iframe3 = document.getElementById('youtubePlayer3');
-          iframe1.src = iframe1.dataset.src;
-          iframe2.src = iframe2.dataset.src;
-          iframe3.src = iframe3.dataset.src;
-          loadYouTubePlayer();
+          if (iframe1 && iframe2 && iframe3) {
+            iframe1.src = iframe1.dataset.src;
+            iframe2.src = iframe2.dataset.src;
+            iframe3.src = iframe3.dataset.src;
+            console.log('Iframe src được gán cho tất cả players.');
+            loadYouTubePlayer();
+          } else {
+            console.error('Lỗi: Một hoặc nhiều iframe không tồn tại.');
+          }
         }
         playerContainer.classList.toggle('active');
 
@@ -925,7 +1037,7 @@
             if (player2 && player2.pauseVideo) player2.pauseVideo();
           }
         } else {
-          pauseAudio();
+          pauseVideo();
         }
       } catch (e) {
         console.error('Lỗi khi toggle player:', e);
@@ -955,18 +1067,35 @@
       }
     });
 
+    // Resume AudioContext on user interaction
+    document.addEventListener('click', () => {
+      try {
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume().then(() => {
+            console.log('AudioContext được tiếp tục sau khi người dùng tương tác.');
+          });
+        }
+      } catch (e) {
+        console.error('Lỗi khi tiếp tục AudioContext:', e);
+      }
+    });
+
     // Idle detection
     let idleTimeout;
     function resetIdleTimer() {
-      clearTimeout(idleTimeout);
-      if (!particlesActive) {
-        document.getElementById('particles-js').classList.add('active');
-        particlesActive = true;
+      try {
+        clearTimeout(idleTimeout);
+        if (!particlesActive) {
+          document.getElementById('particles-js').classList.add('active');
+          particlesActive = true;
+        }
+        idleTimeout = setTimeout(() => {
+          document.getElementById('particles-js').classList.remove('active');
+          particlesActive = false;
+        }, 300000);
+      } catch (e) {
+        console.error('Lỗi khi reset idle timer:', e);
       }
-      idleTimeout = setTimeout(() => {
-        document.getElementById('particles-js').classList.remove('active');
-        particlesActive = false;
-      }, 300000);
     }
 
     document.addEventListener('mousemove', resetIdleTimer);
@@ -977,16 +1106,20 @@
 
     // Visibility change
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) {
-        if (particlesActive) {
-          document.getElementById('particles-js').classList.remove('active');
-          particlesActive = false;
+      try {
+        if (document.hidden) {
+          if (particlesActive) {
+            document.getElementById('particles-js').classList.remove('active');
+            particlesActive = false;
+          }
+        } else {
+          if (!particlesActive) {
+            document.getElementById('particles-js').classList.add('active');
+            particlesActive = true;
+          }
         }
-      } else {
-        if (!particlesActive) {
-          document.getElementById('particles-js').classList.add('active');
-          particlesActive = true;
-        }
+      } catch (e) {
+        console.error('Lỗi khi xử lý visibility change:', e);
       }
     });
 
@@ -996,19 +1129,27 @@
 
     // Block dev tools
     document.addEventListener('keydown', (event) => {
-      if (event.ctrlKey && event.key === 'u') {
-        event.preventDefault();
-        console.log("Đã chặn Ctrl+U");
-      }
-      if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
-        event.preventDefault();
-        console.log("Đã chặn phím mở DevTools (F12 hoặc Ctrl+Shift+I)");
+      try {
+        if (event.ctrlKey && event.key === 'u') {
+          event.preventDefault();
+          console.log("Đã chặn Ctrl+U");
+        }
+        if (event.key === 'F12' || (event.ctrlKey && event.shiftKey && event.key === 'I')) {
+          event.preventDefault();
+          console.log("Đã chặn phím mở DevTools (F12 hoặc Ctrl+Shift+I)");
+        }
+      } catch (e) {
+        console.error('Lỗi khi chặn phím DevTools:', e);
       }
     });
 
     document.addEventListener('contextmenu', (event) => {
-      event.preventDefault();
-      console.log("Đã chặn chuột phải");
+      try {
+        event.preventDefault();
+        console.log("Đã chặn chuột phải");
+      } catch (e) {
+        console.error('Lỗi khi chặn chuột phải:', e);
+      }
     });
   </script>
 </body>
