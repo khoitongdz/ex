@@ -786,6 +786,19 @@
           console.log(`Thời gian hiện tại (Player ${playerId}): ${player.getCurrentTime().toFixed(2)} giây`);
         }
 
+        // Auto-skip ads
+        if (event.data === 1 && playerId === activePlayer) { // Playing state
+          const iframe = document.getElementById(`youtubePlayer${playerId}`);
+          if (iframe && iframe.contentWindow) {
+            const skipButton = iframe.contentWindow.document.querySelector('.ytp-ad-skip-button, .ytp-skip-ad-button, .ytp-ad-skip-button-modern');
+            if (skipButton) {
+              console.log(`Phát hiện nút "Skip Ad" cho Player ${playerId}. Đang nhấn...`);
+              skipButton.click();
+              console.log(`Đã nhấn nút "Skip Ad" cho Player ${playerId}.`);
+            }
+          }
+        }
+
         if (event.data === 0 && playerId === activePlayer) {
           const currentPlayer = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
           if (currentPlayer.getPlaylistIndex() + 1 >= currentPlayer.getPlaylist().length) {
