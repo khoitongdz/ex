@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-  <title>Playlist</title>
+  <link rel="icon" href="https://img2.thuthuatphanmem.vn/uploads/2018/12/09/anh-hacker-viet-nam_111114449.jpg">
+  <title>codebackup</title>
   <link rel="icon" href="https://images-ext-1.discordapp.net/external/oY3IzCcrSLI8TfqjZf_TDPN5whbviE_PGqQqzJd2GYE/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1253726505402499203/6602147533b258ea90daf9b2c4a45176.png?format=webp&quality=lossless&width=476&height=476" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto+Mono&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Mono&family=Orbitron:wght@700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * {
@@ -16,17 +17,17 @@
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(45deg, #1e3c72, #2a5298, #6b48ff, #ff6f61);
-      background-size: 200%;
-      color: #fff;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #3b1b5e, #6b48ff, #ff4b4b);
+      background-size: 300%;
+      color: #ffffff;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow-x: hidden;
       position: relative;
-      animation: gradient 20s ease infinite;
+      animation: gradient 12s ease infinite;
       scroll-behavior: smooth;
       will-change: background-position;
     }
@@ -38,80 +39,81 @@
       width: 100%;
       height: 100%;
       z-index: -1;
-      display: none;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
     }
 
     #particles-js.active {
-      display: block;
+      opacity: 0.9;
     }
 
     .container {
-      max-width: 800px;
+      max-width: 900px;
       width: 90%;
-      padding: 20px;
-      margin: 15px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 30px;
+      margin: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       position: relative;
       z-index: 1;
-      transition: all 0.4s ease, transform 0.3s ease;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       will-change: transform, box-shadow;
     }
 
     .container:hover {
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(255, 255, 255, 0.3);
+      transform: translateY(-8px);
     }
 
     h1, h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       text-transform: uppercase;
-      letter-spacing: 3px;
-      color: #fff;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      letter-spacing: 4px;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(107, 72, 255, 0.5);
       opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
+      transform: translateY(25px);
+      animation: fadeInUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
     }
 
     h1 {
-      font-size: 2.5em;
-      font-weight: 600;
+      font-size: 2.8em;
+      font-weight: 700;
     }
 
     h2 {
-      font-size: 1.8em;
-      margin-top: 30px;
+      font-size: 2em;
+      margin-top: 40px;
     }
 
     .code-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 15px;
-      margin: 8px 0;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      transition: all 0.3s ease;
+      padding: 12px 20px;
+      margin: 10px 0;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       opacity: 0;
-      transform: translateY(15px);
-      animation: slideIn 0.5s ease forwards;
-      will-change: transform, background;
+      transform: translateY(20px);
+      animation: slideIn 0.6s ease forwards;
+      will-change: transform, background, box-shadow;
     }
 
     .code-item:hover {
-      transform: translateY(-3px);
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 6px 20px rgba(107, 72, 255, 0.4);
     }
 
     .code {
       font-family: 'Roboto Mono', monospace;
-      font-size: 1.2em;
+      font-size: 1.3em;
       color: #e0e0e0;
       transition: color 0.3s ease;
     }
@@ -120,63 +122,64 @@
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 1.5em;
-      color: #ccc;
-      transition: all 0.3s ease;
+      font-size: 1.6em;
+      color: #ffffff;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       will-change: transform, color;
     }
 
     .star-btn.copied {
       color: transparent;
-      background: linear-gradient(45deg, #ffd700, #ff6f61);
+      background: linear-gradient(45deg, #ffd700, #ff4b4b);
       background-clip: text;
       -webkit-background-clip: text;
-      animation: sparkle 0.5s ease;
+      animation: sparkle 0.6s ease;
     }
 
     .star-btn:hover {
-      transform: scale(1.2);
+      transform: scale(1.3);
       color: #ffd700;
+      text-shadow: 0 0 15px #ffd700;
     }
 
     .star-btn:active {
-      transform: scale(0.9);
+      transform: scale(0.95);
     }
 
     .footer {
       text-align: center;
-      margin-top: 30px;
-      font-size: 1em;
-      color: #ddd;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+      margin-top: 40px;
+      font-size: 1.1em;
+      color: #e0e0e0;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
       opacity: 0;
-      animation: fadeIn 1s ease forwards 0.8s;
+      animation: fadeIn 1.2s ease forwards 0.9s;
     }
 
     .footer span {
       color: #ffd700;
-      font-weight: 600;
+      font-weight: 700;
       transition: text-shadow 0.3s ease;
     }
 
     .footer span:hover {
-      text-shadow: 0 0 10px #ffd700;
+      text-shadow: 0 0 15px #ffd700, 0 0 25px rgba(255, 215, 0, 0.7);
     }
 
     .copy-toast {
       position: fixed;
-      bottom: 30px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%) translateY(20px);
-      background: linear-gradient(45deg, #ffd700, #ff6f61);
+      background: linear-gradient(45deg, #ffd700, #ff4b4b);
       color: #fff;
-      padding: 10px 20px;
-      border-radius: 10px;
+      padding: 12px 25px;
+      border-radius: 12px;
       opacity: 0;
-      transition: all 0.4s ease;
-      font-size: 1em;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      font-size: 1.1em;
       font-weight: 600;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
       z-index: 1000;
       will-change: transform, opacity;
     }
@@ -188,21 +191,21 @@
 
     .player-container {
       position: fixed;
-      bottom: 15px;
-      right: 15px;
-      max-width: 350px;
+      bottom: 20px;
+      right: 20px;
+      max-width: 400px;
       width: 90%;
-      padding: 15px;
-      background: rgba(30, 30, 30, 0.9);
-      border-radius: 12px;
-      box-shadow: 0 0 15px #00ff00, 0 0 25px rgba(0, 255, 0, 0.5);
-      border: 1px solid #00ff00;
+      padding: 20px;
+      background: rgba(20, 20, 30, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 0 20px #7c4dff, 0 0 30px rgba(124, 77, 255, 0.6);
+      border: 1px solid #7c4dff;
       z-index: 1000;
       display: none;
       font-family: 'Orbitron', sans-serif;
-      transition: all 0.4s ease, width 0.4s ease, height 0.4s ease, top 0.4s ease, left 0.4s ease, border-radius 0.4s ease;
+      transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(30px);
       will-change: transform, opacity, width, height, top, left, border-radius;
     }
 
@@ -217,38 +220,38 @@
       height: 100vh;
       max-width: none;
       border-radius: 0;
-      background: rgba(30, 30, 30, 0.95);
+      background: rgba(20, 20, 30, 0.98);
       opacity: 1;
       transform: translateY(0);
       z-index: 2000;
-      padding: 30px;
+      padding: 40px;
     }
 
     .player-container h3 {
-      color: #00ff00;
+      color: #7c4dff;
       text-align: center;
-      font-size: 2em;
-      margin-bottom: 20px;
-      text-shadow: 0 0 8px #00ff00;
+      font-size: 2.2em;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px #7c4dff, 0 0 20px rgba(124, 77, 255, 0.5);
     }
 
     .player-controls {
       width: 100%;
-      max-width: 500px;
+      max-width: 600px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 25px;
     }
 
     .video-preview {
-      width: 320px;
-      height: 180px;
+      width: 360px;
+      height: 202.5px;
       background: #000;
-      border-radius: 8px;
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 10px #00ff00;
-      transition: opacity 0.4s ease;
+      box-shadow: 0 0 15px #7c4dff, 0 0 25px rgba(124, 77, 255, 0.5);
+      transition: all 0.4s ease;
     }
 
     .video-preview iframe {
@@ -264,66 +267,85 @@
 
     .playlist-selector, .playback-buttons, .volume-control, .progress-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 450px;
+    }
+
+    .playlist-selector select {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #7c4dff;
+      padding: 12px;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+
+    .playlist-selector select:hover {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 10px #7c4dff;
     }
 
     input[type="range"] {
       -webkit-appearance: none;
       width: 100%;
-      height: 10px;
-      background: #2d2d2d;
-      border-radius: 5px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
       outline: none;
-      box-shadow: 0 0 8px #00ff00;
+      box-shadow: 0 0 10px #7c4dff;
       transition: box-shadow 0.3s ease;
     }
 
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 20px;
-      height: 20px;
-      background: #00ff00;
+      width: 22px;
+      height: 22px;
+      background: #7c4dff;
       border-radius: 50%;
       cursor: pointer;
-      box-shadow: 0 0 10px #00ff00;
+      box-shadow: 0 0 12px #7c4dff, 0 0 20px rgba(124, 77, 255, 0.5);
       transition: all 0.3s ease;
     }
 
     input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 12px #00ff00, 0 0 20px rgba(0, 255, 0, 0.5);
+      transform: scale(1.15);
+      box-shadow: 0 0 15px #7c4dff, 0 0 25px rgba(124, 77, 255, 0.7);
     }
 
     button {
-      transition: all 0.3s ease;
-      box-shadow: 0 0 8px #00ff00;
+      background: #7c4dff;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
     button:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 12px #00ff00;
+      box-shadow: 0 0 15px #7c4dff, 0 0 25px rgba(124, 77, 255, 0.7);
     }
 
     .toggle-player-btn {
       position: fixed;
-      top: 15px;
-      right: 15px;
-      width: 50px;
-      height: 50px;
+      top: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
       background: url('https://images-ext-1.discordapp.net/external/oY3IzCcrSLI8TfqjZf_TDPN5whbviE_PGqQqzJd2GYE/%3Fsize%3D4096/https/cdn.discordapp.com/avatars/1253726505402499203/6602147533b258ea90daf9b2c4a45176.png?format=webp&quality=lossless&width=476&height=476') no-repeat center;
       background-size: cover;
       border-radius: 50%;
-      border: 1px solid #00ff00;
-      box-shadow: 0 0 10px #00ff00;
+      border: 1px solid #7c4dff;
+      box-shadow: 0 0 12px #7c4dff, 0 0 20px rgba(124, 77, 255, 0.5);
       cursor: pointer;
       z-index: 3000;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       will-change: transform, box-shadow;
     }
 
     .toggle-player-btn:hover {
-      transform: scale(1.2);
-      box-shadow: 0 0 15px #00ff00;
+      transform: scale(1.3);
+      box-shadow: 0 0 20px #7c4dff, 0 0 30px rgba(124, 77, 255, 0.7);
     }
 
     .toggle-player-btn:active {
@@ -346,7 +368,7 @@
 
     @keyframes sparkle {
       0% { transform: scale(1); }
-      50% { transform: scale(1.5); }
+      50% { transform: scale(1.6); }
       100% { transform: scale(1); }
     }
 
@@ -358,106 +380,58 @@
 
     @media (max-width: 600px) {
       .container {
-        margin: 10px;
-        padding: 15px;
+        margin: 15px;
+        padding: 20px;
       }
       h1 {
-        font-size: 2em;
+        font-size: 2.2em;
       }
       h2 {
-        font-size: 1.5em;
+        font-size: 1.6em;
       }
       .code {
-        font-size: 1em;
+        font-size: 1.1em;
       }
       .star-btn {
-        font-size: 1.3em;
+        font-size: 1.4em;
       }
       .footer {
-        font-size: 0.8em;
-      }
-      .copy-toast {
-        padding: 8px 15px;
         font-size: 0.9em;
       }
+      .copy-toast {
+        padding: 10px 20px;
+        font-size: 1em;
+      }
       .player-container.active {
-        padding: 15px;
+        padding: 20px;
       }
       .player-container h3 {
-        font-size: 1.5em;
-        margin-bottom: 15px;
+        font-size: 1.8em;
+        margin-bottom: 20px;
       }
       .player-controls {
         max-width: 100%;
       }
       .video-preview {
         width: 100%;
-        max-width: 280px;
-        height: 157.5px; /* Maintain 16:9 aspect ratio */
+        max-width: 320px;
+        height: 180px;
       }
       .playlist-selector, .playback-buttons, .volume-control, .progress-container {
         max-width: 100%;
       }
       .playback-buttons {
-        gap: 5px;
+        gap: 8px;
         flex-wrap: wrap;
       }
       button {
-        padding: 8px 12px;
+        padding: 8px 15px;
         font-size: 0.9em;
       }
       .toggle-player-btn {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
       }
-    }
-
-    /* Additional improvements for smoother and more beautiful effects */
-    body {
-      animation: gradient 15s ease infinite; /* Faster gradient for more dynamic feel */
-    }
-
-    .container {
-      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother easing */
-    }
-
-    .code-item {
-      transition: transform 0.3s ease-out, background 0.3s ease-out, box-shadow 0.3s ease-out;
-    }
-
-    .star-btn {
-      transition: transform 0.3s ease-out, color 0.3s ease-out;
-    }
-
-    .copy-toast {
-      transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-    }
-
-    .player-container {
-      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bounce effect for opening */
-    }
-
-    input[type="range"] {
-      transition: box-shadow 0.3s ease-out;
-    }
-
-    button {
-      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-    }
-
-    .toggle-player-btn {
-      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-    }
-
-    /* Add glow effect on hover for buttons */
-    button:hover {
-      box-shadow: 0 0 15px #00ff00, 0 0 25px rgba(0, 255, 0, 0.7);
-    }
-
-    /* Particle improvements */
-    #particles-js.active {
-      opacity: 0.8;
-      transition: opacity 1s ease-in-out;
     }
   </style>
 </head>
@@ -476,11 +450,12 @@
     <h3>Playlist</h3>
     <div class="player-controls">
       <div class="playlist-selector">
-        <label class="block text-sm font-medium text-green-400 mb-2">Chọn Playlist để phát</label>
+        <label class="block text-sm font-medium text-purple-400 mb-2">Chọn Playlist để phát</label>
         <select id="playlistSelector" class="bg-gray-800 text-white p-3 rounded-lg w-full">
           <option value="1">Playlist 1</option>
           <option value="2">Playlist 2</option>
           <option value="3">Playlist 3</option>
+          <option value="4">Playlist 4</option>
         </select>
       </div>
       <div class="video-preview">
@@ -508,39 +483,55 @@
           allowfullscreen
           loading="lazy"
         ></iframe>
+        <iframe
+          id="youtubePlayer4"
+          src="https://www.youtube.com/embed/videoseries?list=PLGBKsNyGY-afmc5ff3n1HOYGTmZO1xJGw&enablejsapi=1"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
       </div>
       <div class="playback-buttons">
-        <button onclick="playVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Phát</button>
-        <button onclick="pauseVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Tạm Dừng</button>
-        <button onclick="nextVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Bài Tiếp</button>
-        <button onclick="previousVideo()" class="bg-green-600 text-black px-4 py-2 rounded-lg text-sm font-bold">Bài Trước</button>
+        <button onclick="playVideo()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Phát</button>
+        <button onclick="pauseVideo()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Tạm Dừng</button>
+        <button onclick="nextVideo()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Bài Tiếp</button>
+        <button onclick="previousVideo()" class="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Bài Trước</button>
       </div>
       <div class="volume-control">
-        <label for="volume" class="block text-sm font-medium text-green-400 mb-2">Âm lượng (0-100%)</label>
+        <label for="volume" class="block text-sm font-medium text-purple-400 mb-2">Âm lượng (0-100%)</label>
         <input type="range" id="volume" min="0" max="1" step="0.01" value="1" oninput="adjustVolume(this.value)" class="w-full">
       </div>
       <div id="progress1Container" class="progress-container">
-        <label for="progress1" class="block text-sm font-medium text-green-400 mb-2">Tiến trình (Playlist 1)</label>
+        <label for="progress1" class="block text-sm font-medium text-purple-400 mb-2">Tiến trình (Playlist 1)</label>
         <input type="range" id="progress1" min="0" max="100" value="0" oninput="seekTo(1, this.value)" class="w-full">
-        <div class="flex justify-between text-xs text-green-400 mt-2">
+        <div class="flex justify-between text-xs text-purple-400 mt-2">
           <span id="currentTime1">0:00</span>
           <span id="duration1">0:00</span>
         </div>
       </div>
       <div id="progress2Container" class="progress-container">
-        <label for="progress2" class="block text-sm font-medium text-green-400 mb-2">Tiến trình (Playlist 2)</label>
+        <label for="progress2" class="block text-sm font-medium text-purple-400 mb-2">Tiến trình (Playlist 2)</label>
         <input type="range" id="progress2" min="0" max="100" value="0" oninput="seekTo(2, this.value)" class="w-full">
-        <div class="flex justify-between text-xs text-green-400 mt-2">
+        <div class="flex justify-between text-xs text-purple-400 mt-2">
           <span id="currentTime2">0:00</span>
           <span id="duration2">0:00</span>
         </div>
       </div>
       <div id="progress3Container" class="progress-container">
-        <label for="progress3" class="block text-sm font-medium text-green-400 mb-2">Tiến trình (Playlist 3)</label>
+        <label for="progress3" class="block text-sm font-medium text-purple-400 mb-2">Tiến trình (Playlist 3)</label>
         <input type="range" id="progress3" min="0" max="100" value="0" oninput="seekTo(3, this.value)" class="w-full">
-        <div class="flex justify-between text-xs text-green-400 mt-2">
+        <div class="flex justify-between text-xs text-purple-400 mt-2">
           <span id="currentTime3">0:00</span>
           <span id="duration3">0:00</span>
+        </div>
+      </div>
+      <div id="progress4Container" class="progress-container">
+        <label for="progress4" class="block text-sm font-medium text-purple-400 mb-2">Tiến trình (Playlist 4)</label>
+        <input type="range" id="progress4" min="0" max="100" value="0" oninput="seekTo(4, this.value)" class="w-full">
+        <div class="flex justify-between text-xs text-purple-400 mt-2">
+          <span id="currentTime4">0:00</span>
+          <span id="duration4">0:00</span>
         </div>
       </div>
     </div>
@@ -554,17 +545,17 @@
       try {
         particlesJS('particles-js', {
           particles: {
-            number: { value: 50, density: { enable: true, value_area: 1500 } }, // Increased particles for better effect
-            color: { value: ['#ffffff', '#ffd700', '#ff6f61'] },
-            shape: { type: 'circle' },
-            opacity: { value: 0.5, random: true }, // Slightly higher opacity
-            size: { value: 3, random: true },
-            line_linked: { enable: false },
-            move: { enable: true, speed: 2, direction: 'none', random: true } // Faster movement
+            number: { value: 70, density: { enable: true, value_area: 1200 } },
+            color: { value: ['#ffffff', '#ffd700', '#ff4b4b', '#7c4dff'] },
+            shape: { type: ['circle', 'triangle', 'star'] },
+            opacity: { value: 0.6, random: true },
+            size: { value: 4, random: true },
+            line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.3, width: 1 },
+            move: { enable: true, speed: 3, direction: 'none', random: true }
           },
           interactivity: {
             detect_on: 'canvas',
-            events: { onhover: { enable: false }, onclick: { enable: false } }
+            events: { onhover: { enable: true, mode: 'grab' }, onclick: { enable: true, mode: 'push' } }
           },
           retina_detect: true
         });
@@ -574,13 +565,12 @@
       }
     }
 
-    // Danh sách mã (fixed typo)
     const backupCodes = [
       'ijzpvu5k6', '0qnhesfrx', 'adjeka07l', 'ji71duj32', 'owz2vumre', 'nhy6rlizf', 'adw8inse2', '6m06pumzq', 'z6t3uq07z',
     ];
 
     const mainAccCodes = [
-      'esb1tmo9p', 'g5j8yq2og', 'ze9eemh7l', 'keqz40nqr', 'au0nl3bcq', 'a7vmor92t', '317gsnwn4', 'epuskphxi', 'b6zqs7rms', 'eypvqt2u6'
+      'u2ld2a6fw', 'vanjru4sj', '12ak6xsl9', 'l1kyjskus', '5bmpe1mzm', 'y3gxoygam', 'dgvfhomu7', 'v8qntdmu6', 'n9at92dsv', 'ftwsrm0a0'
     ];
 
     function renderCodeList(containerId, codeList) {
@@ -604,7 +594,6 @@
       }
     }
 
-    // Debounce function
     function debounce(func, wait) {
       let timeout;
       return function (...args) {
@@ -613,7 +602,6 @@
       };
     }
 
-    // Copy code with debounce
     const copyCode = debounce((code) => {
       try {
         navigator.clipboard.writeText(code).then(() => {
@@ -635,18 +623,17 @@
       }
     }, 300);
 
-    // Confetti effect
     function launchConfetti() {
       try {
         import('https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js').then((module) => {
           module.default({
-            particleCount: 60, // Increased for better effect
-            spread: 50,
+            particleCount: 80,
+            spread: 60,
             origin: { y: 0.5 },
-            colors: ['#ffd700', '#ff6f61'],
-            scalar: 0.8,
-            gravity: 0.3,
-            ticks: 120
+            colors: ['#ffd700', '#ff4b4b', '#7c4dff'],
+            scalar: 0.9,
+            gravity: 0.4,
+            ticks: 150
           });
         });
       } catch (e) {
@@ -654,7 +641,6 @@
       }
     }
 
-    // Add click event for copy buttons
     document.addEventListener('click', (event) => {
       try {
         if (event.target.closest('.star-btn')) {
@@ -666,14 +652,12 @@
       }
     });
 
-    // Initialize code lists
     renderCodeList('backupCodeList', backupCodes);
     renderCodeList('mainAccCodeList', mainAccCodes);
 
-    // YouTube Player API
     let youtubeApiLoaded = false;
-    let player1, player2, player3;
-    let duration1 = 0, duration2 = 0, duration3 = 0;
+    let player1, player2, player3, player4;
+    let duration1 = 0, duration2 = 0, duration3 = 0, duration4 = 0;
     let activePlayer = 1;
     let updateProgressHandle = null;
 
@@ -715,6 +699,13 @@
             'onError': (event) => console.error(`Lỗi Player 3: ${event.data}`),
           },
         });
+        player4 = new YT.Player('youtubePlayer4', {
+          events: {
+            'onReady': (event) => onPlayerReady(event, 4),
+            'onStateChange': (event) => onPlayerStateChange(event, 4),
+            'onError': (event) => console.error(`Lỗi Player 4: ${event.data}`),
+          },
+        });
         console.log('YouTube Players khởi tạo thành công.');
       } catch (e) {
         console.error('Lỗi khi khởi tạo YouTube Player:', e);
@@ -723,7 +714,7 @@
 
     function onPlayerReady(event, playerId) {
       try {
-        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : playerId === 3 ? player3 : player4;
         if (!player || !player.getDuration) {
           console.error(`Lỗi: Player ${playerId} không có target hoặc getDuration.`);
           return;
@@ -754,21 +745,23 @@
         if (event.data === 1 || event.data === 3) {
           updateDuration(playerId);
         }
-        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : playerId === 3 ? player3 : player4;
         if (player && player.getCurrentTime) {
           console.log(`Thời gian hiện tại (Player ${playerId}): ${player.getCurrentTime().toFixed(2)} giây`);
         }
         if (event.data === 0 && playerId === activePlayer) {
-          const currentPlayer = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+          const currentPlayer = playerId === 1 ? player1 : playerId === 2 ? player2 : playerId === 3 ? player3 : player4;
           if (currentPlayer.getPlaylistIndex() + 1 >= currentPlayer.getPlaylist().length) {
-            console.log(`Playlist ${playerId} đã kết thúc, chuyển sang Playlist ${(activePlayer % 3) + 1}.`);
-            activePlayer = (activePlayer % 3) + 1;
+            console.log(`Playlist ${playerId} đã kết thúc, chuyển sang Playlist ${(activePlayer % 4) + 1}.`);
+            activePlayer = (activePlayer % 4) + 1;
             if (player1 && player1.pauseVideo) player1.pauseVideo();
             if (player2 && player2.pauseVideo) player2.pauseVideo();
             if (player3 && player3.pauseVideo) player3.pauseVideo();
+            if (player4 && player4.pauseVideo) player4.pauseVideo();
             if (activePlayer === 1 && player1 && player1.playVideo) player1.playVideo();
             else if (activePlayer === 2 && player2 && player2.playVideo) player2.playVideo();
             else if (activePlayer === 3 && player3 && player3.playVideo) player3.playVideo();
+            else if (activePlayer === 4 && player4 && player4.playVideo) player4.playVideo();
             updateProgressVisibility();
           }
         }
@@ -779,7 +772,7 @@
 
     function updateDuration(playerId) {
       try {
-        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : playerId === 3 ? player3 : player4;
         const duration = player.getDuration() || 0;
         if (playerId === 1) {
           duration1 = duration;
@@ -787,9 +780,12 @@
         } else if (playerId === 2) {
           duration2 = duration;
           document.getElementById('duration2').textContent = formatTime(duration);
-        } else {
+        } else if (playerId === 3) {
           duration3 = duration;
           document.getElementById('duration3').textContent = formatTime(duration);
+        } else {
+          duration4 = duration;
+          document.getElementById('duration4').textContent = formatTime(duration);
         }
         console.log(`Cập nhật thời lượng Player ${playerId}: ${duration}s`);
       } catch (e) {
@@ -802,21 +798,27 @@
         const progress1 = document.getElementById('progress1Container');
         const progress2 = document.getElementById('progress2Container');
         const progress3 = document.getElementById('progress3Container');
+        const progress4 = document.getElementById('progress4Container');
         const iframe1 = document.getElementById('youtubePlayer1');
         const iframe2 = document.getElementById('youtubePlayer2');
         const iframe3 = document.getElementById('youtubePlayer3');
+        const iframe4 = document.getElementById('youtubePlayer4');
         progress1.style.transition = 'opacity 0.4s ease';
         progress2.style.transition = 'opacity 0.4s ease';
         progress3.style.transition = 'opacity 0.4s ease';
+        progress4.style.transition = 'opacity 0.4s ease';
         progress1.style.opacity = activePlayer === 1 ? '1' : '0';
         progress2.style.opacity = activePlayer === 2 ? '1' : '0';
         progress3.style.opacity = activePlayer === 3 ? '1' : '0';
+        progress4.style.opacity = activePlayer === 4 ? '1' : '0';
         progress1.style.display = activePlayer === 1 ? 'block' : 'none';
         progress2.style.display = activePlayer === 2 ? 'block' : 'none';
         progress3.style.display = activePlayer === 3 ? 'block' : 'none';
+        progress4.style.display = activePlayer === 4 ? 'block' : 'none';
         iframe1.classList.toggle('active', activePlayer === 1);
         iframe2.classList.toggle('active', activePlayer === 2);
         iframe3.classList.toggle('active', activePlayer === 3);
+        iframe4.classList.toggle('active', activePlayer === 4);
         console.log(`Cập nhật giao diện: Active Player ${activePlayer}`);
       } catch (e) {
         console.error('Lỗi khi cập nhật giao diện tiến trình và video:', e);
@@ -831,6 +833,8 @@
           player2.playVideo();
         } else if (activePlayer === 3 && player3 && player3.playVideo) {
           player3.playVideo();
+        } else if (activePlayer === 4 && player4 && player4.playVideo) {
+          player4.playVideo();
         }
         startProgressUpdates();
       } catch (e) {
@@ -843,6 +847,7 @@
         if (player1 && player1.pauseVideo) player1.pauseVideo();
         if (player2 && player2.pauseVideo) player2.pauseVideo();
         if (player3 && player3.pauseVideo) player3.pauseVideo();
+        if (player4 && player4.pauseVideo) player4.pauseVideo();
       } catch (e) {
         console.error('Lỗi khi tạm dừng video:', e);
       }
@@ -856,6 +861,8 @@
           player2.nextVideo();
         } else if (activePlayer === 3 && player3 && player3.nextVideo) {
           player3.nextVideo();
+        } else if (activePlayer === 4 && player4 && player4.nextVideo) {
+          player4.nextVideo();
         }
       } catch (e) {
         console.error('Lỗi khi chuyển bài tiếp:', e);
@@ -870,6 +877,8 @@
           player2.previousVideo();
         } else if (activePlayer === 3 && player3 && player3.previousVideo) {
           player3.previousVideo();
+        } else if (activePlayer === 4 && player4 && player4.previousVideo) {
+          player4.previousVideo();
         }
       } catch (e) {
         console.error('Lỗi khi chuyển bài trước:', e);
@@ -882,6 +891,7 @@
         if (player1 && player1.setVolume) player1.setVolume(youtubeVolume);
         if (player2 && player2.setVolume) player2.setVolume(youtubeVolume);
         if (player3 && player3.setVolume) player3.setVolume(youtubeVolume);
+        if (player4 && player4.setVolume) player4.setVolume(youtubeVolume);
         console.log(`Đã điều chỉnh âm lượng YouTube: ${youtubeVolume}%`);
       } catch (e) {
         console.error('Lỗi khi điều chỉnh âm lượng:', e);
@@ -890,8 +900,8 @@
 
     function seekTo(playerId, value) {
       try {
-        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
-        const duration = player.getDuration() || (playerId === 1 ? duration1 : playerId === 2 ? duration2 : duration3);
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : playerId === 3 ? player3 : player4;
+        const duration = player.getDuration() || (playerId === 1 ? duration1 : playerId === 2 ? duration2 : playerId === 3 ? duration3 : duration4);
         if (player && player.seekTo) {
           const seconds = (value / 100) * duration;
           player.seekTo(seconds, true);
@@ -904,8 +914,8 @@
 
     function updateProgress(playerId) {
       try {
-        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : player3;
-        const duration = playerId === 1 ? duration1 : playerId === 2 ? duration2 : duration3;
+        const player = playerId === 1 ? player1 : playerId === 2 ? player2 : playerId === 3 ? player3 : player4;
+        const duration = playerId === 1 ? duration1 : playerId === 2 ? duration2 : playerId === 3 ? duration3 : duration4;
         if (player && player.getCurrentTime && playerId === activePlayer) {
           const currentTime = player.getCurrentTime();
           document.getElementById(`currentTime${playerId}`).textContent = formatTime(currentTime);
@@ -927,6 +937,7 @@
           updateProgress(1);
           updateProgress(2);
           updateProgress(3);
+          updateProgress(4);
           updateProgressHandle = requestAnimationFrame(loop);
         }
         updateProgressHandle = requestAnimationFrame(loop);
@@ -946,7 +957,6 @@
       }
     }
 
-    // Toggle player
     document.getElementById('togglePlayerBtn').addEventListener('click', () => {
       try {
         const playerContainer = document.getElementById('playerContainer');
@@ -963,14 +973,22 @@
             player1.playVideo();
             if (player2 && player2.pauseVideo) player2.pauseVideo();
             if (player3 && player3.pauseVideo) player3.pauseVideo();
+            if (player4 && player4.pauseVideo) player4.pauseVideo();
           } else if (activePlayer === 2 && player2 && player2.playVideo) {
             player2.playVideo();
             if (player1 && player1.pauseVideo) player1.pauseVideo();
             if (player3 && player3.pauseVideo) player3.pauseVideo();
+            if (player4 && player4.pauseVideo) player4.pauseVideo();
           } else if (activePlayer === 3 && player3 && player3.playVideo) {
             player3.playVideo();
             if (player1 && player1.pauseVideo) player1.pauseVideo();
             if (player2 && player2.pauseVideo) player2.pauseVideo();
+            if (player4 && player4.pauseVideo) player4.pauseVideo();
+          } else if (activePlayer === 4 && player4 && player4.playVideo) {
+            player4.playVideo();
+            if (player1 && player1.pauseVideo) player1.pauseVideo();
+            if (player2 && player2.pauseVideo) player2.pauseVideo();
+            if (player3 && player3.pauseVideo) player3.pauseVideo();
           }
         } else {
           pauseVideo();
@@ -980,7 +998,6 @@
       }
     });
 
-    // Playlist selector
     document.getElementById('playlistSelector').addEventListener('change', (event) => {
       try {
         activePlayer = parseInt(event.target.value);
@@ -989,21 +1006,28 @@
           if (player1 && player1.playVideo) player1.playVideo();
           if (player2 && player2.pauseVideo) player2.pauseVideo();
           if (player3 && player3.pauseVideo) player3.pauseVideo();
+          if (player4 && player4.pauseVideo) player4.pauseVideo();
         } else if (activePlayer === 2) {
           if (player2 && player2.playVideo) player2.playVideo();
           if (player1 && player1.pauseVideo) player1.pauseVideo();
           if (player3 && player3.pauseVideo) player3.pauseVideo();
+          if (player4 && player4.pauseVideo) player4.pauseVideo();
         } else if (activePlayer === 3) {
           if (player3 && player3.playVideo) player3.playVideo();
           if (player1 && player1.pauseVideo) player1.pauseVideo();
           if (player2 && player2.pauseVideo) player2.pauseVideo();
+          if (player4 && player4.pauseVideo) player4.pauseVideo();
+        } else if (activePlayer === 4) {
+          if (player4 && player4.playVideo) player4.playVideo();
+          if (player1 && player1.pauseVideo) player1.pauseVideo();
+          if (player2 && player2.pauseVideo) player2.pauseVideo();
+          if (player3 && player3.pauseVideo) player3.pauseVideo();
         }
       } catch (e) {
         console.error('Lỗi khi thay đổi playlist:', e);
       }
     });
 
-    // Idle detection
     let idleTimeout;
     function resetIdleTimer() {
       try {
@@ -1027,7 +1051,6 @@
     document.addEventListener('scroll', resetIdleTimer);
     resetIdleTimer();
 
-    // Visibility change
     document.addEventListener('visibilitychange', () => {
       try {
         if (document.hidden) {
@@ -1046,11 +1069,9 @@
       }
     });
 
-    // Initialize
     initParticles();
     updateProgressVisibility();
 
-    // Block dev tools
     document.addEventListener('keydown', (event) => {
       try {
         if (event.ctrlKey && event.key === 'u') {
@@ -1061,7 +1082,7 @@
           event.preventDefault();
           console.log("Đã chặn phím mở DevTools (F12 hoặc Ctrl+Shift+I)");
         }
-      } catch (e) {
+      }catch (e) {
         console.error('Lỗi khi chặn phím DevTools:', e);
       }
     });
